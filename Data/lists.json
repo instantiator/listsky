@@ -1,0 +1,11 @@
+{
+    "Lists": [
+        {
+            "Title": "Collective Intelligentsia",
+            "Description": "A collection of Collective Intelligence practitioners, researchers and communities",
+            "ListId": null,
+            "Path_CSV": "Data/list-ci.csv",
+            "Publish": false
+        }
+    ]
+}

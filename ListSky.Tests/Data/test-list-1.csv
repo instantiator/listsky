@@ -1,0 +1,2 @@
+Name,Type,Description,AccountName_BlueSky,Server_Mastodon,AccountName_Mastodon,AccountName_Twitter,AccountName_LinkedIn,AccountName_YouTube,AccountName_GitHub,Url_RssFeed,Url_Website,Url_Blog
+"test","Individual","A simple individual test","instantiator","mastodon.social","instantiator",,"lewiswestbury",,"instantiator","https://instantiator.dev/index.xml","https://instantiator.dev","https://instantiator.dev"
