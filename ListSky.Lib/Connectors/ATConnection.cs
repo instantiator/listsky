@@ -1,0 +1,125 @@
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
+using FishyFlip;
+using FishyFlip.Models;
+using FishyFlip.Tools;
+
+namespace ListSky.Lib.Connectors;
+
+public class ATConnection : IDisposable
+{
+    private string server;
+    private string account;
+    private string password;
+
+    private ATProtocol protocol;
+    private Session? session;
+
+    public ATConnection(string server, string account, string password)
+    {
+        this.server = server;
+        this.account = account;
+        this.password = password;
+
+        this.protocol = new ATProtocolBuilder()
+            .EnableAutoRenewSession(true)
+            .WithInstanceUrl(new Uri("https://" + server))
+            .Build();
+    }
+
+    public bool Connected => session != null;
+
+    public async Task<Session?> ConnectAsync()
+    {
+        var result = await protocol.Server.CreateSessionAsync(account, password, CancellationToken.None);
+        result.Switch(session =>
+        {
+            this.session = session;
+        },
+        error =>
+        {
+            this.session = null;
+            throw new Exception($"Error: {error.StatusCode} {error.Detail}");
+        });
+
+        return this.session;
+    }
+
+    public void Disconnect()
+    {
+        session = null;
+    }
+
+    public void Dispose()
+    {
+        Disconnect();
+    }
+
+    [MemberNotNull(nameof(session))]
+    private void RequireConnected()
+    { 
+        if (!Connected) throw new Exception("Not connected");
+        if (session == null) throw new Exception("Connected, but session is null");
+    }
+
+    public async Task<IEnumerable<ListView>> GetListsAsync()
+    {
+        RequireConnected();
+        var result = await protocol.Graph.GetListsAsync(session.Did);
+        var lists = result.HandleResult()!.Lists;
+        return lists;
+    }
+
+    public async Task<IEnumerable<ListItemView>> GetListItemsAsync(ATUri listUri)
+    {
+        RequireConnected();
+        var result = await protocol.Graph.GetListAsync(listUri);
+        var list = result.HandleResult()!;
+        return list.Items;
+    }
+
+    public async Task<RecordRef> CreateListAsync(string name, string? description = null)
+    {
+        RequireConnected();
+        var result = await protocol.Repo.CreateCurateListAsync(name, description ?? "List created by ListSky");
+        var record = result.HandleResult()!;
+        return record;
+        // return record.Uri.Pathname.Split('/').Last();
+    }
+
+    public async Task<Success> DeleteListAsync(ATUri listUri)
+    {
+        RequireConnected();
+        var result = await protocol.Repo.DeleteListAsync(listUri.Rkey);
+        return result.HandleResult()!;
+    }
+
+    public async Task<RecordRef> AddPersonToList(ATUri listUri, ATDid subject)
+    {
+        RequireConnected();
+        var result = await protocol.Repo.CreateListItemAsync(subject, listUri);
+        var record = result.HandleResult()!;
+        return record;
+    }
+
+    public async Task<Success> RemovePersonFromList(ATUri listUri, ATDid subjectDid)
+    {
+        RequireConnected();
+        var listItems = await GetListItemsAsync(listUri);
+        var removalRkey = listItems.First(item => item.Subject.Did == subjectDid).Uri.Rkey;
+        var result = await protocol.Repo.DeleteListItemAsync(removalRkey);
+        return result.HandleResult()!;
+    }
+
+    // private async Task<ActorRecord?> GetProfileViaHandle()
+    // {
+    //     var profile = (await protocol.Identity.ResolveHandleAsync(ATHandle.Create(account)!)).HandleResult();
+    //     return await GetProfileViaATDID(profile?.Did!);
+    // }
+
+    // private async Task<ActorRecord?> GetProfileViaATDID(ATDid? did = null)
+    // {
+    //     return (await protocol.Repo.GetActorAsync(did)).HandleResult();
+    // }
+}

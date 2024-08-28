@@ -3,7 +3,7 @@
         {
             "Title": "Test",
             "Description": "A list to support testing of the data structures for this application",
-            "ListId": "did:plc:pbsny2ayg4hiqrbj74j652du/lists/3l2pc34arej27",
+            "ListId": "3l2pc34arej27",
             "Path_CSV": "Data/test-list-1.csv",
             "Publish": true
         }

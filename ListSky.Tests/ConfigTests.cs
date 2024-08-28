@@ -1,6 +1,7 @@
 using System.Text.Json;
 using FishyFlip;
 using FishyFlip.Models;
+using ListSky.Lib.Connectors;
 using ListSky.Lib.DTO;
 
 namespace ListSky.Tests;
@@ -40,29 +41,16 @@ public class ConfigTests
     }
 
     [TestMethod]
-    public async Task BlueSky_PublishedLists_Exist()
+    public async Task AT_PublishedLists_Exist()
     {
         var config = Config.FromEnv();
-        var publishedLists = config.AllListData.Lists.Where(l => l.Publish);
+        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
+        var session = await connection.ConnectAsync();
 
-        var atProtocolBuilder = new ATProtocolBuilder()
-            .EnableAutoRenewSession(true)
-            .WithInstanceUrl(new Uri("https://" + config.Server_AT));
-        var atProtocol = atProtocolBuilder.Build();
-
-        Result<Session> result = await atProtocol.Server.CreateSessionAsync(config.AccountName_AT, config.AppPassword_AT, CancellationToken.None);
-        result.Switch(success => 
+        var atLists = await connection.GetListsAsync();
+        foreach (var list in config.AllListData.Lists)
         {
-            Assert.IsTrue(result.IsT0);
-            var session = result.AsT0;
-            Assert.IsNotNull(session);
-            Assert.IsNotNull(session.Did);
-        }, 
-        error =>
-        {
-            throw new Exception($"Error: {error.StatusCode} {error.Detail}");
-        });
-
-        // TODO: check that the named lists exist (their did should be provided in the config)
-    }
+            Assert.AreEqual(1, atLists.Count(l => l.Uri.Pathname.EndsWith($"/{list.ListId}")), JsonSerializer.Serialize(atLists));
+        }
+   }
 }

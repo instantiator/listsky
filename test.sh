@@ -1,4 +1,4 @@
 #!/bin/bash
 
 set -a && source test.env && set +a
-dotnet test
+dotnet test --verbosity:normal $@

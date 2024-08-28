@@ -12,7 +12,14 @@ public class Config
     public string AppPassword_AT { get; set; } = null!;
     public string Path_AllListsMetadataJson { get; set; } = null!;
 
-    public AllLists AllListData => JsonSerializer.Deserialize<AllLists>(File.ReadAllText(Path_AllListsMetadataJson))!;
+    private static readonly JsonSerializerOptions options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        AllowTrailingCommas = true,
+        ReadCommentHandling = JsonCommentHandling.Skip,
+    };
+
+    public AllLists AllListData => JsonSerializer.Deserialize<AllLists>(File.ReadAllText(Path_AllListsMetadataJson), options)!;
 
     public IEnumerable<ListEntry> ReadList(string path)
     {
