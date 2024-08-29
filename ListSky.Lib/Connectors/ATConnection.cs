@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
@@ -9,6 +10,9 @@ namespace ListSky.Lib.Connectors;
 
 public class ATConnection : IDisposable
 {
+    private const int RATE_ms = 1000;
+    private static DateTime lastAction = DateTime.MinValue;
+
     private string server;
     private string account;
     private string password;
@@ -30,8 +34,20 @@ public class ATConnection : IDisposable
 
     public bool Connected => session != null;
 
+    private static async Task RateLimit()
+    {
+        var now = DateTime.Now;
+        var elapsed = now - lastAction;
+        if (elapsed.TotalMilliseconds < RATE_ms)
+        {
+            var delay = RATE_ms - (int)elapsed.TotalMilliseconds;
+            await Task.Delay(delay);
+        }
+    }
+
     public async Task<Session?> ConnectAsync()
     {
+        await RateLimit();
         var result = await protocol.Server.CreateSessionAsync(account, password, CancellationToken.None);
         result.Switch(session =>
         {
@@ -66,6 +82,7 @@ public class ATConnection : IDisposable
     public async Task<IEnumerable<ListView>> GetListsAsync()
     {
         RequireConnected();
+        await RateLimit();
         var result = await protocol.Graph.GetListsAsync(session.Did);
         var lists = result.HandleResult()!.Lists;
         return lists;
@@ -74,6 +91,7 @@ public class ATConnection : IDisposable
     public async Task<IEnumerable<ListItemView>> GetListItemsAsync(ATUri listUri)
     {
         RequireConnected();
+        await RateLimit();
         var result = await protocol.Graph.GetListAsync(listUri);
         var list = result.HandleResult()!;
         return list.Items;
@@ -82,15 +100,24 @@ public class ATConnection : IDisposable
     public async Task<RecordRef> CreateListAsync(string name, string? description = null)
     {
         RequireConnected();
+        await RateLimit();
         var result = await protocol.Repo.CreateCurateListAsync(name, description ?? "List created by ListSky");
         var record = result.HandleResult()!;
         return record;
         // return record.Uri.Pathname.Split('/').Last();
     }
 
+    public async Task<IEnumerable<ListItemView>> FindSubjectInList(ATUri listUri, ATDid subjectDid)
+    {
+        RequireConnected();
+        var listItems = await GetListItemsAsync(listUri);
+        return listItems.Where(item => item.Subject.Did?.Handler == subjectDid.Handler);
+    }
+
     public async Task<Success> DeleteListAsync(ATUri listUri)
     {
         RequireConnected();
+        await RateLimit();
         var result = await protocol.Repo.DeleteListAsync(listUri.Rkey);
         return result.HandleResult()!;
     }
@@ -98,6 +125,7 @@ public class ATConnection : IDisposable
     public async Task<RecordRef> AddPersonToListAsync(ATUri listUri, ATDid subject)
     {
         RequireConnected();
+        await RateLimit();
         var result = await protocol.Repo.CreateListItemAsync(subject, listUri);
         var record = result.HandleResult()!;
         return record;
@@ -108,6 +136,7 @@ public class ATConnection : IDisposable
         RequireConnected();
         var listItems = await GetListItemsAsync(listUri);
         var removalRkey = listItems.First(item => item.Subject.Did!.Handler == subjectDid.Handler).Uri.Rkey;
+        await RateLimit();
         var result = await protocol.Repo.DeleteListItemAsync(removalRkey);
         return result.HandleResult()!;
     }
@@ -115,6 +144,7 @@ public class ATConnection : IDisposable
     public async Task<HandleResolution?> FindPersonByHandleAsync(string handle)
     {
         RequireConnected();
+        await RateLimit();
         var result = await protocol.Identity.ResolveHandleAsync(ATHandle.Create(handle)!);
         return result.HandleResult();
     }

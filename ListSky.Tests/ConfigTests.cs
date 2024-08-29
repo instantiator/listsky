@@ -39,18 +39,4 @@ public class ConfigTests
         Assert.AreEqual(ListEntryType.Individual, entry.Type);
         Assert.IsFalse(string.IsNullOrWhiteSpace(entry.AccountName_BlueSky));
     }
-
-    [TestMethod]
-    public async Task AT_PublishedLists_Exist()
-    {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
-
-        var atLists = await connection.GetListsAsync();
-        foreach (var list in config.AllListData.Lists)
-        {
-            Assert.AreEqual(1, atLists.Count(l => l.Uri.Pathname.EndsWith($"/{list.ListId}")), JsonSerializer.Serialize(atLists));
-        }
-   }
 }

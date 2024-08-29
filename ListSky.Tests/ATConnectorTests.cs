@@ -9,6 +9,15 @@ namespace ListSky.Tests;
 [TestClass]
 public class ATConnectorTests
 {
+    [TestCleanup]
+    public async Task CleanUp()
+    {
+        var config = Config.FromEnv();
+        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
+        var session = await connection.ConnectAsync();
+        await DeleteAllUnitTestLists(connection);
+    }
+
     [TestMethod]
     public async Task ATConnector_CanConnect()
     {
@@ -67,20 +76,19 @@ public class ATConnectorTests
             // find that person in list
             Thread.Sleep(1000 * 2);
             var listWithPerson = await connection.GetListItemsAsync(list.Uri);
-            Assert.AreEqual(1, listWithPerson.Count(),
-                string.Join("\n\n",
-                    JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }),
-                    JsonSerializer.Serialize(subject, new JsonSerializerOptions { WriteIndented = true }),
-                    JsonSerializer.Serialize(listWithPerson, new JsonSerializerOptions { WriteIndented = true }),
-                    JsonSerializer.Serialize(addedSubject.Uri, new JsonSerializerOptions { WriteIndented = true })));
+            Assert.AreEqual(1, listWithPerson.Count());
+
+            // string.Join("\n\n",
+            //     JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }),
+            //     JsonSerializer.Serialize(subject, new JsonSerializerOptions { WriteIndented = true }),
+            //     JsonSerializer.Serialize(listWithPerson, new JsonSerializerOptions { WriteIndented = true }),
+            //     JsonSerializer.Serialize(addedSubject.Uri, new JsonSerializerOptions { WriteIndented = true }))
 
             var personInList = listWithPerson.SingleOrDefault(p => p.Subject.Did!.Handler.Equals(addedSubject.Uri.Did.Handler));
-            Assert.IsNotNull(personInList,
-                    string.Join("\n\n",
-                    JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }),
-                    JsonSerializer.Serialize(subject, new JsonSerializerOptions { WriteIndented = true }),
-                    JsonSerializer.Serialize(listWithPerson, new JsonSerializerOptions { WriteIndented = true }),
-                    JsonSerializer.Serialize(addedSubject, new JsonSerializerOptions { WriteIndented = true })));
+            Assert.IsNotNull(personInList);
+
+            var subjectInList = await connection.FindSubjectInList(list.Uri, subject.Did);
+            Assert.AreEqual(1, subjectInList.Count());
 
             // remove person from list
             var removeOk = await connection.RemovePersonFromListAsync(list.Uri, subject.Did);
@@ -97,7 +105,6 @@ public class ATConnectorTests
             // delete the list
             var deleteOk = await connection.DeleteListAsync(list.Uri);
             Assert.IsNotNull(deleteOk);
-            await DeleteAllUnitTestLists(connection);
         }
     }
 
