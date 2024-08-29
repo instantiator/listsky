@@ -95,7 +95,7 @@ public class ATConnection : IDisposable
         return result.HandleResult()!;
     }
 
-    public async Task<RecordRef> AddPersonToList(ATUri listUri, ATDid subject)
+    public async Task<RecordRef> AddPersonToListAsync(ATUri listUri, ATDid subject)
     {
         RequireConnected();
         var result = await protocol.Repo.CreateListItemAsync(subject, listUri);
@@ -103,13 +103,20 @@ public class ATConnection : IDisposable
         return record;
     }
 
-    public async Task<Success> RemovePersonFromList(ATUri listUri, ATDid subjectDid)
+    public async Task<Success> RemovePersonFromListAsync(ATUri listUri, ATDid subjectDid)
     {
         RequireConnected();
         var listItems = await GetListItemsAsync(listUri);
-        var removalRkey = listItems.First(item => item.Subject.Did == subjectDid).Uri.Rkey;
+        var removalRkey = listItems.First(item => item.Subject.Did!.Handler == subjectDid.Handler).Uri.Rkey;
         var result = await protocol.Repo.DeleteListItemAsync(removalRkey);
         return result.HandleResult()!;
+    }
+
+    public async Task<HandleResolution?> FindPersonByHandleAsync(string handle)
+    {
+        RequireConnected();
+        var result = await protocol.Identity.ResolveHandleAsync(ATHandle.Create(handle)!);
+        return result.HandleResult();
     }
 
     // private async Task<ActorRecord?> GetProfileViaHandle()

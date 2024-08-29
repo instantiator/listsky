@@ -1,3 +1,4 @@
+using System.Text.Json;
 using FishyFlip;
 using FishyFlip.Models;
 using ListSky.Lib.Connectors;
@@ -47,21 +48,70 @@ public class ATConnectorTests
         var config = Config.FromEnv();
         var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
         var session = await connection.ConnectAsync();
-        // var lists = await connection.GetLists();
 
+        // create list
         var list = await connection.CreateListAsync("Unit test list");
 
-        // TODO: add person to list
+        try
+        {
+            // add person to list
+            var subject = await connection.FindPersonByHandleAsync(config.AccountName_AT);
+            Assert.IsNotNull(subject);
+            Assert.IsNotNull(subject.Did);
 
-        // TODO: find that person in list
+            var addedSubject = await connection.AddPersonToListAsync(list.Uri, subject.Did);
+            Assert.IsNotNull(addedSubject);
+            Assert.IsNotNull(addedSubject.Uri);
+            Assert.IsNotNull(addedSubject.Uri.Did);
 
-        // TODO: remove person from list
+            // find that person in list
+            Thread.Sleep(1000 * 2);
+            var listWithPerson = await connection.GetListItemsAsync(list.Uri);
+            Assert.AreEqual(1, listWithPerson.Count(),
+                string.Join("\n\n",
+                    JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }),
+                    JsonSerializer.Serialize(subject, new JsonSerializerOptions { WriteIndented = true }),
+                    JsonSerializer.Serialize(listWithPerson, new JsonSerializerOptions { WriteIndented = true }),
+                    JsonSerializer.Serialize(addedSubject.Uri, new JsonSerializerOptions { WriteIndented = true })));
 
-        // TODO: establish that person is not in the list
+            var personInList = listWithPerson.SingleOrDefault(p => p.Subject.Did!.Handler.Equals(addedSubject.Uri.Did.Handler));
+            Assert.IsNotNull(personInList,
+                    string.Join("\n\n",
+                    JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }),
+                    JsonSerializer.Serialize(subject, new JsonSerializerOptions { WriteIndented = true }),
+                    JsonSerializer.Serialize(listWithPerson, new JsonSerializerOptions { WriteIndented = true }),
+                    JsonSerializer.Serialize(addedSubject, new JsonSerializerOptions { WriteIndented = true })));
 
-        // TODO: delete the list
+            // remove person from list
+            var removeOk = await connection.RemovePersonFromListAsync(list.Uri, subject.Did);
+            Assert.IsNotNull(removeOk);
 
-        Assert.IsTrue(false);
+            // establish that person is not in the list
+            var listWithoutPerson = await connection.GetListItemsAsync(list.Uri);
+            var personNotInList = listWithoutPerson.FirstOrDefault(p => p.Subject.Did == subject.Did);
+            Assert.IsNull(personNotInList);
+
+        }
+        finally
+        {
+            // delete the list
+            var deleteOk = await connection.DeleteListAsync(list.Uri);
+            Assert.IsNotNull(deleteOk);
+            await DeleteAllUnitTestLists(connection);
+        }
+    }
+
+    private async Task DeleteAllUnitTestLists(ATConnection connection)
+    {
+        var allLists = await connection.GetListsAsync();
+        var deleteLists = allLists.Where(l => l.Name.StartsWith("Unit test"));
+        var deleted = 0;
+        foreach (var deleteList in deleteLists)
+        {
+            var deleteListOk = await connection.DeleteListAsync(deleteList.Uri);
+            if (deleteListOk != null) deleted++;
+        }
+        Assert.AreEqual(deleteLists.Count(), deleted);
     }
 
 }
