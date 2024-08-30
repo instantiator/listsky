@@ -1,13 +1,27 @@
 # ListSky
 
+ListSky is a repository app that can manage any number of BlueSky lists.
+
+When a pull request is merged to `main`, the contents of the `Data` directory are used to update each list on BlueSky.
+
 ## How to add people to these lists
 
-### Create a pull request (fast option, bit technical)
+There are 2 ways to submit an update to the lists:
+
+1. Create a pull request (preferred)
+2. Create an issue
+
+Each is explained below.
+
+### 1. Create a pull request (fast option, bit technical)
 
 This tool will update lists on BlueSky based on edits made to CSV files in the `Data` directory.
 
 1. Fork this repository
-1. Make your edits to a list CSV (eg. edit `list-ci.csv` to add a new Collective Intelligence person)
+1. Make your edits to a list CSV in the `Data` directory
+   
+   (eg. edit `Data/list-ci.csv` to add a new Collective Intelligence person)
+
 1. Commit and push your change to your fork
 1. Create a pull request for your change to the source repository
 1. Tests will run against your pull request to make sure there are no mistakes
@@ -15,14 +29,18 @@ This tool will update lists on BlueSky based on edits made to CSV files in the `
 
 If in doubt, ask a developer friend to help!
 
-### Create an issue (bit slower, bit less technical)
+### 2. Create an issue (bit slower, bit less technical)
 
-You could also [create a new issue](https://github.com/instantiator/listsky/issues/new/choose). Make sure you provide enough info about the people you want to add:
+You could also [create a new issue](https://github.com/instantiator/listsky/issues/new/choose). Make sure you provide enough info about the people you want to add. (As a minimum, provide a name, description, BlueSky account, and state which list you'd like to add them to.)
 
 * Name
 * Description
+* Record type (individual / organisation / community / bot)
 * BlueSky account
 * List(s) to add them to
+
+You can also add details of a number of other accounts:
+
 * Other accounts (optional)
   * Mastodon
   * Twitter
@@ -33,9 +51,20 @@ You could also [create a new issue](https://github.com/instantiator/listsky/issu
   * Website url
   * Blog url
 
-### Types of record
+### Required fields
 
-Each CSV record must have a value in the `Type` column. This can be:
+Please ensure you provide a value for:
+
+* `Name` - name of the person/organisation/community/bot to include in the list
+* `Type` - type of record (see below)
+* `Description` - a description of the record you're adding that links it to the list
+* `AccountName_BlueSky` - the AT account name - for BlueSky these are often suffixed with `.bsky.social`, eg. `instantiator.bsky.social`
+
+All other columns are optional, but very helpful!
+
+### `Type` of record
+
+When editing a CSV record, note that it must have a value in the `Type` column. This can be:
 
 * `Individual` - a person who should be included in the list
 * `Organisation` - a charity, company, government department, etc. (ie. a formal organisation)
@@ -44,24 +73,13 @@ Each CSV record must have a value in the `Type` column. This can be:
 
 **NB. Match the spelling and capitalisation above - in particular the UK English spelling of Organisation!**
 
-### Required fields
-
-Please ensure you provide a value for:
-
-* `Name` - name of the person/organisation/community/bot to include in the list
-* `Type` - type of record (see above)
-* `Description` - a description of the record you're adding that links it to the list
-* `AccountName_BlueSky` - the AT account name - for BlueSky these are often suffixed with `.bsky.social`, eg. `instantiator.bsky.social`
-
-All other columns are optional, but very helpful!
-
-## Build your own
+## Build your own ListSky
 
 1. Fork this repository
 1. You may need to enable github actions through GitHub
 1. Create all the lists you're going to use, and get their ids
-1. Create new CSV files in the `Data` directory
-1. Update `Data/lists.json` to point to your new lists and new CSV files
+1. Create new CSV files in the `Data` directory for each list, copy headings from existing CSV files
+1. Modify `Data/lists.jsonc` to point to your new lists and new CSV files
 1. Set up branch protections to prevent accidental pushes to `main`
 1. Require that the tests pass before pull requests can be merged (use workflow `on-pull-request-run-tests`)
 
@@ -72,7 +90,7 @@ To configure the runtime environment, provide the following as GithHub Actions S
 * `Server_AT` (the AT server, eg. `bsky.social`)
 * `AccountName_AT` (the account that publishes the lists, eg. `instantiator.bsky.social`)
 * `AppPassword_AT` (create an app password for this use case)
-* `Path_AllListsMetadataJson` (relative path to your config, probably best left as: `Data/lists.json`)
+* `Path_AllListsMetadataJson` (relative path to your config, probably best left as: `Data/lists.jsonc`)
 
 To test locally, create a file called `test.env` file in the root of this repository, and provide values for the same properties:
 
