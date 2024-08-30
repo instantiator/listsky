@@ -16,12 +16,32 @@ public abstract class AbstractAction
         this.connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
     }
 
-    public async Task ExecuteAsync()
+    public async Task<ActionResult> ExecuteAsync()
     {
-        this.session = await connection.ConnectAsync();
-        await ExecuteImplementationAsync();
-        connection.Disconnect();
+        ActionResult result = new()
+        {
+            Started = DateTime.Now
+        };
+
+        try
+        {
+            session = await connection.ConnectAsync();
+            await ExecuteImplementationAsync(result);
+            result.Success = true;
+        }
+        catch (Exception e)
+        {
+            result.Exception = e;
+            result.Success = false;
+        }
+        finally
+        {
+            result.Finished = DateTime.Now;
+            connection.Disconnect();
+            session = null;
+        }
+        return result;
     }
 
-    protected abstract Task ExecuteImplementationAsync();
+    protected abstract Task ExecuteImplementationAsync(ActionResult result);
 }

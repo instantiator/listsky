@@ -1,0 +1,50 @@
+name: run-listsky-tests
+
+on:
+  workflow_call:
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+      Server_AT:
+        required: true
+      AccountName_AT:
+        required: true
+      AppPassword_AT:
+        required: true
+      Path_AllListsMetadataJson:
+        required: true
+
+jobs:
+  run-listsky-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: '8'
+
+      - name: Restore packages
+        run: dotnet restore --locked-mode
+
+      - name: Run tests
+        working-directory: ./ListSky.Tests
+        env:
+            Server_AT: ${{ secrets.Server_AT }}
+            AccountName_AT: ${{ secrets.AccountName_AT }}
+            AppPassword_AT: ${{ secrets.AppPassword_AT }}
+            Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+        run: |
+          dotnet test --verbosity:normal
+
+      - name: Modify BlueSky lists
+        env:
+          Server_AT: ${{ secrets.Server_AT }}
+          AccountName_AT: ${{ secrets.AccountName_AT }}
+          AppPassword_AT: ${{ secrets.AppPassword_AT }}
+          Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+        run: |
+          dotnet run --project ./ListSky.App/ListSky.App.csproj apply

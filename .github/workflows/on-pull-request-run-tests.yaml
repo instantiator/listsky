@@ -1,0 +1,21 @@
+name: on-pull-rqeuest-run-tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "Data/*.csv"
+      - "Data/*.json"
+
+permissions:
+  contents: read
+
+jobs:
+  on-pull-request-run-tests:
+    uses: ./.github/workflows/actions/run-tests.yaml
+    secrets:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        Server_AT: ${{ secrets.Server_AT }}
+        AccountName_AT: ${{ secrets.AccountName_AT }}
+        AppPassword_AT: ${{ secrets.AppPassword_AT }}
+        Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
