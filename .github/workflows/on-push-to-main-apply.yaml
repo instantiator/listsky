@@ -12,7 +12,6 @@ jobs:
   on-push-to-main-apply:
     uses: ./.github/workflows/push-to-bluesky.yaml
     secrets:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         Server_AT: ${{ secrets.Server_AT }}
         AccountName_AT: ${{ secrets.AccountName_AT }}
         AppPassword_AT: ${{ secrets.AppPassword_AT }}

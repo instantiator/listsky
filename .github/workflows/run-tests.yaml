@@ -8,8 +8,6 @@ on:
     #     type: string
     #     default: main
     secrets:
-      GITHUB_TOKEN:
-        required: true
       Server_AT:
         required: true
       AccountName_AT:

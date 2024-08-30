@@ -3,8 +3,6 @@ name: run-listsky-tests
 on:
   workflow_call:
     secrets:
-      GITHUB_TOKEN:
-        required: true
       Server_AT:
         required: true
       AccountName_AT:
