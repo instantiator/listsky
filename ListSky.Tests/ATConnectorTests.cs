@@ -71,15 +71,10 @@ public class ATConnectorTests
             Assert.IsNotNull(addedSubject.Uri.Did);
 
             // find that person in list
-            Thread.Sleep(1000 * 2);
+            Thread.Sleep(5000);
+
             var listWithPerson = await connection.GetListItemsAsync(list.Uri);
             Assert.AreEqual(1, listWithPerson.Count());
-
-            // string.Join("\n\n",
-            //     JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }),
-            //     JsonSerializer.Serialize(subject, new JsonSerializerOptions { WriteIndented = true }),
-            //     JsonSerializer.Serialize(listWithPerson, new JsonSerializerOptions { WriteIndented = true }),
-            //     JsonSerializer.Serialize(addedSubject.Uri, new JsonSerializerOptions { WriteIndented = true }))
 
             var personInList = listWithPerson.SingleOrDefault(p => p.Subject.Did!.Handler.Equals(addedSubject.Uri.Did.Handler));
             Assert.IsNotNull(personInList);

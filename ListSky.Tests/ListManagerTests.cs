@@ -27,7 +27,7 @@ public class ListManagerTests
         // create list
         var list = await connection.CreateListAsync("Unit test list");
 
-        Thread.Sleep(2 * 1000);
+        Thread.Sleep(5000);
 
         try
         {
@@ -41,7 +41,7 @@ public class ListManagerTests
             Assert.IsNotNull(addedSubject.Uri);
             Assert.IsNotNull(addedSubject.Uri.Did);
 
-            Thread.Sleep(2 * 1000);
+            Thread.Sleep(5000);
 
             var authoritativeList = new List<ListEntry>()
             {
