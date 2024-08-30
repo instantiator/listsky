@@ -2,11 +2,6 @@ name: run-listsky-tests
 
 on:
   workflow_call:
-    # inputs:
-    #   source-branch:
-    #     required: false
-    #     type: string
-    #     default: main
     secrets:
       Server_AT:
         required: true
@@ -24,8 +19,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        # with:
-        #     ref: ${{ inputs.source-branch }}
       
       - name: Setup .NET 8 SDK
         uses: actions/setup-dotnet@v4
