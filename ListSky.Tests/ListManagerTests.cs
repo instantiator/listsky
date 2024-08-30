@@ -27,6 +27,8 @@ public class ListManagerTests
         // create list
         var list = await connection.CreateListAsync("Unit test list");
 
+        Thread.Sleep(2 * 1000);
+
         try
         {
             // add person to list
