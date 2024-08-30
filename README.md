@@ -2,6 +2,8 @@
 
 ## How to add people to these lists
 
+### Create a pull request (fast option, bit technical)
+
 This tool will update lists on BlueSky based on edits made to CSV files in the `Data` directory.
 
 1. Fork this repository
@@ -12,6 +14,24 @@ This tool will update lists on BlueSky based on edits made to CSV files in the `
 1. Your pull request will be reviewed, and if it passes it will be merged into the main repository
 
 If in doubt, ask a developer friend to help!
+
+### Create an issue (bit slower, bit less technical)
+
+You could also [create a new issue](https://github.com/instantiator/listsky/issues/new/choose). Make sure you provide enough info about the people you want to add:
+
+* Name
+* Description
+* BlueSky account
+* List(s) to add them to
+* Other accounts (optional)
+  * Mastodon
+  * Twitter
+  * LinkedIn
+  * YouTube
+  * GitHub
+  * RSS feed url
+  * Website url
+  * Blog url
 
 ### Types of record
 
