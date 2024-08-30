@@ -43,7 +43,7 @@ All other columns are optional, but very helpful!
 1. Create new CSV files in the `Data` directory
 1. Update `Data/lists.json` to point to your new lists and new CSV files
 1. Set up branch protections to prevent accidental pushes to `main`
-1. Require that the tests pass before pull requests can be merged
+1. Require that the tests pass before pull requests can be merged (use workflow `on-pull-request-run-tests`)
 
 ### Configuration
 
