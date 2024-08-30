@@ -129,7 +129,7 @@ brew install act
 brew install gh
 ```
 
-You'll need to provide a github token to ACT to be able to interact with you repository. `gh auth token` can provide this, and we pass that in to `act` as a secret called `GITHUB_TOKEN`
+You'll need to provide a github token to `act` to be able to interact with you repository. `gh auth token` can provide this, and we pass that in to `act` as a secret called `GITHUB_TOKEN`
 
 ```bash
 gh auth login
