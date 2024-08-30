@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   on-push-to-main-apply:
-    uses: ./.github/workflows/actions/push-to-bluesky.yaml
+    uses: ./.github/workflows/push-to-bluesky.yaml
     secrets:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         Server_AT: ${{ secrets.Server_AT }}

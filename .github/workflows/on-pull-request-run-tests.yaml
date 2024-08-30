@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   on-pull-request-run-tests:
-    uses: ./.github/workflows/actions/run-tests.yaml
+    uses: ./.github/workflows/run-tests.yaml
     secrets:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         Server_AT: ${{ secrets.Server_AT }}
