@@ -1,4 +1,4 @@
-name: on-pull-rqeuest-run-tests
+name: on-pull-request-run-tests
 
 on:
   workflow_dispatch:
