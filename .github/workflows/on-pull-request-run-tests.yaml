@@ -3,9 +3,9 @@ name: on-pull-request-run-tests
 on:
   workflow_dispatch:
   pull_request:
-    paths:
-      - "Data/*.csv"
-      - "Data/*.json"
+    # paths:
+    #   - "Data/*.csv"
+    #   - "Data/*.json"
 
 permissions:
   contents: read
