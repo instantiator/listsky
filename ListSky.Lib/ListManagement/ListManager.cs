@@ -16,7 +16,8 @@ public class ListManager
         var toDelete = new List<ListItemView>();
         var toAdd = new List<ListEntry>();
 
-        foreach (var entry in authoritativeList)
+        // only add list members that have a BlueSky account name
+        foreach (var entry in authoritativeList.Where(entry => !string.IsNullOrWhiteSpace(entry.AccountName_BlueSky)))
         {
             if (!foundList.Any(l => l.Subject.Handle == entry.AccountName_BlueSky))
             {
@@ -24,6 +25,7 @@ public class ListManager
             }
         }
 
+        // remove list members that don't have an account listed
         foreach (var entry in foundList)
         {
             if (!authoritativeList.Any(l => l.AccountName_BlueSky == entry.Subject.Handle))

@@ -1,4 +1,4 @@
-name: run-listsky-tests
+name: document-lists
 
 on:
   workflow_call:
@@ -13,7 +13,7 @@ on:
         required: true
 
 jobs:
-  test:
+  document:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,12 +28,14 @@ jobs:
       - name: Restore packages
         run: dotnet restore --locked-mode
 
-      - name: Run tests
-        working-directory: ./ListSky.Tests
+      - name: Document lists
         env:
-            Server_AT: ${{ secrets.Server_AT }}
-            AccountName_AT: ${{ secrets.AccountName_AT }}
-            AppPassword_AT: ${{ secrets.AppPassword_AT }}
-            Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+          Server_AT: ${{ secrets.Server_AT }}
+          AccountName_AT: ${{ secrets.AccountName_AT }}
+          AppPassword_AT: ${{ secrets.AppPassword_AT }}
+          Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
         run: |
-          dotnet test --verbosity:normal
+          dotnet run --project ./ListSky.App/ListSky.App.csproj document /docs
+
+      - name: Push new documents to branch
+        uses: actions4git/add-commit-push@v1

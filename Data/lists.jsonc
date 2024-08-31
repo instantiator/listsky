@@ -1,8 +1,13 @@
 {
+    "Title": "ListSky",
+    "Descriptions": [
+        "Featuring a number of BlueSky lists for open communities.",
+    ],
     "Lists": [
         {
             "Title": "Collective Intelligentsia",
             "Description": "A collection of Collective Intelligence practitioners, researchers and communities",
+            "Slug": "collective-intelligentsia",
             "ListId": "3l2x635iyqc2b",
             "Path_CSV": "Data/list-ci.csv",
             "Publish": true
