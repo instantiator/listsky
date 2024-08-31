@@ -37,5 +37,5 @@ jobs:
         run: |
           dotnet run --project ./ListSky.App/ListSky.App.csproj document /output-docs
 
-      - name: Push new documents to branch
-        uses: actions4git/add-commit-push@v1
+      # - name: Push new documents to branch
+      #   uses: actions4git/add-commit-push@v1
