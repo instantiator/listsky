@@ -1,4 +1,4 @@
-name: on-pull-request-run-tests
+name: on-pull-request
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  on-pull-request-run-tests:
+  run-tests:
     uses: ./.github/workflows/run-tests.yaml
     secrets:
         Server_AT: ${{ secrets.Server_AT }}
