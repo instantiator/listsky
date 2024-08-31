@@ -47,12 +47,12 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v1
         with:
-          path: output-docs
+          path: "./output-docs"
     
   deploy-documentation:
+    needs: generate-documentation
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: generate-documentation
 
     permissions:
       pages: write
