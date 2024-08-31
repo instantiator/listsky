@@ -23,7 +23,7 @@ public class ListSkyApp
 
             case "document":
                 var target = args[1];
-                var docResult = await DocumentListsAsync(target);
+                var docResult = DocumentLists(target);
                 return docResult ? 0 : 1;
 
             default:
@@ -33,7 +33,7 @@ public class ListSkyApp
         }
     }
 
-    private static async Task<bool> DocumentListsAsync(string targetPath)
+    private static bool DocumentLists(string targetPath)
     {
         try
         {

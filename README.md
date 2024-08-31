@@ -77,6 +77,7 @@ When editing a CSV record, note that it must have a value in the `Type` column. 
 
 1. Fork this repository
 1. You may need to enable github actions through GitHub
+1. Configure your instance by creating secrets (described in the following section)
 1. Create all the lists you're going to use, and get their ids
 1. Create new CSV files in the `Data` directory for each list, copy headings from existing CSV files
 1. Modify `Data/lists.jsonc` to point to your new lists and new CSV files
@@ -85,7 +86,7 @@ When editing a CSV record, note that it must have a value in the `Type` column. 
 
 ### Configuration
 
-To configure the runtime environment, provide the following as GithHub Actions Secrets:
+To configure the runtime environment, provide values for the following GithHub Actions repository secrets:
 
 * `Server_AT` (the AT server, eg. `bsky.social`)
 * `AccountName_AT` (the account that publishes the lists, eg. `instantiator.bsky.social`)
@@ -152,3 +153,7 @@ Use `act` to simulate a push to main:
 ```bash
 act -W .github/workflows/on-push-to-main-apply.yaml --secret-file test.env -s GITHUB_TOKEN="$(gh auth token)" -j "on-push-to-main-apply"
 ```
+
+## References
+
+* https://graphite.dev/guides/github-actions-permissions

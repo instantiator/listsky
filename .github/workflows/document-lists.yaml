@@ -29,6 +29,9 @@ jobs:
       - name: Restore packages
         run: dotnet restore --locked-mode
 
+      - name: Install realpath tool
+        run: sudo apt-get install -y realpath
+
       - name: Document lists
         env:
           Server_AT: ${{ secrets.Server_AT }}
@@ -36,7 +39,8 @@ jobs:
           AppPassword_AT: ${{ secrets.AppPassword_AT }}
           Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
         run: |
-          dotnet run --project ./ListSky.App/ListSky.App.csproj document /output-docs
+          mkdir -p output-docs
+          dotnet run --project ./ListSky.App/ListSky.App.csproj document $(realpath output-docs)
 
       # - name: Push new documents to branch
       #   uses: actions4git/add-commit-push@v1
