@@ -37,11 +37,16 @@ public class ListSkyApp
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(targetPath) || !Directory.Exists(targetPath))
+            if (string.IsNullOrWhiteSpace(targetPath))
             {
-                Console.WriteLine($"Target path not found: {targetPath}");
+                Console.WriteLine($"Target path is blank");
                 return false;
             }
+
+            if (!Directory.Exists(targetPath)) Directory.CreateDirectory(targetPath);
+
+            var listsPath = Path.Combine(targetPath, "lists");
+            if (!Directory.Exists(listsPath)) Directory.CreateDirectory(listsPath);
 
             var config = Config.FromEnv();
             var files = DocsGenerator.Render(config);
