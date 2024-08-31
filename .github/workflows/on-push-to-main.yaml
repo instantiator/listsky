@@ -18,7 +18,7 @@ jobs:
       AppPassword_AT: ${{ secrets.AppPassword_AT }}
       Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
 
-  apply-lists:
+  apply:
     needs: run-tests
     uses: ./.github/workflows/push-to-bluesky.yaml
     secrets:
@@ -26,3 +26,13 @@ jobs:
         AccountName_AT: ${{ secrets.AccountName_AT }}
         AppPassword_AT: ${{ secrets.AppPassword_AT }}
         Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+
+  document-lists:
+    needs: apply
+    uses: ./.github/workflows/document-lists.yaml
+    secrets:
+        Server_AT: ${{ secrets.Server_AT }}
+        AccountName_AT: ${{ secrets.AccountName_AT }}
+        AppPassword_AT: ${{ secrets.AppPassword_AT }}
+        Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+  

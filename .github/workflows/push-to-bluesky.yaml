@@ -1,4 +1,4 @@
-name: run-listsky-tests
+name: push-to-bluesky
 
 on:
   workflow_call:
@@ -13,7 +13,7 @@ on:
         required: true
 
 jobs:
-  apply:
+  apply-list-changes:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
       - name: Restore packages
         run: dotnet restore --locked-mode
 
-      - name: Update BlueSky lists
+      - name: Modify BlueSky lists
         env:
           Server_AT: ${{ secrets.Server_AT }}
           AccountName_AT: ${{ secrets.AccountName_AT }}
