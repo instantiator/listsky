@@ -4,6 +4,8 @@ ListSky is a repository app that can manage any number of BlueSky lists.
 
 When a pull request is merged to `main`, the contents of the `Data` directory are used to update each list on BlueSky.
 
+The application also publishes the contents of all lists through GitHub Pages.
+
 ## How to add people to these lists
 
 There are 2 ways to submit an update to the lists:
@@ -77,7 +79,7 @@ When editing a CSV record, note that it must have a value in the `Type` column. 
 
 1. Fork this repository
 1. You may need to enable github actions through GitHub
-1. Configure your instance by creating secrets (described in the following section)
+1. Create secrets to configure your instance (described in the following section)
 1. Create all the lists you're going to use, and get their ids
 1. Create new CSV files in the `Data` directory for each list, copy headings from existing CSV files
 1. Modify `Data/lists.jsonc` to point to your new lists and new CSV files
@@ -153,8 +155,3 @@ Use `act` to simulate a push to main:
 ```bash
 act -W .github/workflows/on-push-to-main-apply.yaml --secret-file test.env -s GITHUB_TOKEN="$(gh auth token)" -j "on-push-to-main-apply"
 ```
-
-## References
-
-* https://graphite.dev/guides/github-actions-permissions
-* https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
