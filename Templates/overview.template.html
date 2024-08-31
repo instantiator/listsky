@@ -1,0 +1,24 @@
+{{#with AllLists}}
+<html>
+  <head>
+    <title>{{Title}}</title>
+  </head>
+  <body>
+    <h1>{{Title}}</h1>
+    <p>{{Description}}</p>
+
+    <ul>
+      {{#each Lists}}
+
+      <li>
+        <a href="lists/{{ListId}}.html">{{Title}}</a>
+        {{#if Published}}(published){{/if}}
+        <br />
+        {{Description}}
+      </li>
+
+      {{/each}}
+    </ul>
+  </body>
+</html>
+{{/with}}

@@ -15,4 +15,9 @@
   <ItemGroup>
     <None Include="Data/*" CopyToOutputDirectory="Always" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Templates/*" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
 </Project>

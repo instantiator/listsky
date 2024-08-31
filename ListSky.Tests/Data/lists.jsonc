@@ -1,8 +1,13 @@
 {
+    "Title": "ListSky",
+    "Descriptions": [
+        "Featuring a number of BlueSky lists for open communities.",
+    ],
     "Lists": [
         {
             "Title": "Test",
             "Description": "A list to support testing of the data structures for this application",
+            "Slug": "test-list",
             "ListId": "3l2pc34arej27",
             "Path_CSV": "Data/test-list-1.csv",
             "Publish": true
