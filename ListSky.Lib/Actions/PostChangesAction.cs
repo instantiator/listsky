@@ -30,7 +30,7 @@ public class PostChangesAction : AbstractAction<IEnumerable<PostSummary>>
         {
             foreach (var addition in listResolution.Value.ToAdd)
             {
-                var message = $"➕ Added {addition.Name} (@{addition.AccountName_BlueSky}) to list: {listResolution.Key.Title}";
+                var message = $"➕ Added {addition.Name}, @{addition.AccountName_BlueSky} to list: {listResolution.Key.Title}";
                 try
                 {
                     var response = await connection.PostAsync(message);
