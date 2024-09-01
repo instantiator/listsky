@@ -4,7 +4,7 @@ using ListSky.Lib.DTO;
 
 namespace ListSky.Lib.Actions;
 
-public abstract class AbstractAction
+public abstract class AbstractAction<DataType>
 {
     protected Config config;
     protected ATConnection connection;
@@ -16,9 +16,9 @@ public abstract class AbstractAction
         this.connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
     }
 
-    public async Task<ActionResult> ExecuteAsync()
+    public async Task<ActionResult<DataType>> ExecuteAsync()
     {
-        ActionResult result = new()
+        ActionResult<DataType> result = new()
         {
             Started = DateTime.Now
         };
@@ -26,8 +26,7 @@ public abstract class AbstractAction
         try
         {
             session = await connection.ConnectAsync();
-            await ExecuteImplementationAsync(result);
-            result.Success = true;
+            result.Success = await ExecuteImplementationAsync(result);
         }
         catch (Exception e)
         {
@@ -43,5 +42,5 @@ public abstract class AbstractAction
         return result;
     }
 
-    protected abstract Task ExecuteImplementationAsync(ActionResult result);
+    protected abstract Task<bool> ExecuteImplementationAsync(ActionResult<DataType> result);
 }

@@ -23,7 +23,7 @@ public class ListSkyApp
 
             case "document":
                 var target = args[1];
-                var docResult = DocumentLists(target);
+                var docResult = await DocumentListsAsync(target);
                 return docResult ? 0 : 1;
 
             default:
@@ -33,31 +33,15 @@ public class ListSkyApp
         }
     }
 
-    private static bool DocumentLists(string targetPath)
+    private static async Task<bool> DocumentListsAsync(string targetPath)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(targetPath))
-            {
-                Console.WriteLine($"Target path is blank");
-                return false;
-            }
-
-            if (!Directory.Exists(targetPath)) Directory.CreateDirectory(targetPath);
-
-            var listsPath = Path.Combine(targetPath, "lists");
-            if (!Directory.Exists(listsPath)) Directory.CreateDirectory(listsPath);
-
             var config = Config.FromEnv();
-            var files = DocsGenerator.Render(config);
-
-            foreach (var file in files)
-            {
-                File.WriteAllText(Path.Combine(targetPath, file.Path), file.Html);
-            }
-
-            Console.WriteLine(JsonSerializer.Serialize(files, new JsonSerializerOptions { WriteIndented = true }));
-            return true;
+            var action = new DocumentListsAction(config, targetPath);
+            var result = await action.ExecuteAsync();
+            Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
+            return result.Success;
         }
         catch (Exception e)
         {
@@ -72,10 +56,23 @@ public class ListSkyApp
         try
         {
             var config = Config.FromEnv();
-            var action = new ResolveListsAction(config);
-            var result = await action.ExecuteAsync();
-            Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
-            return result.Success;
+            var action1 = new ResolveListsAction(config);
+            var result1 = await action1.ExecuteAsync();
+
+            // even if not a full success, some actions may have succeeded - these should be posted about
+            if (result1.Data != null)
+            {
+                var action2 = new PostChangesAction(config, result1.Data);
+                var result2 = await action2.ExecuteAsync();
+                Console.WriteLine(JsonSerializer.Serialize(new object[] { result1, result2 }, new JsonSerializerOptions { WriteIndented = true }));
+                return result1.Success && result2.Success;
+            }
+            else
+            {
+                Console.WriteLine(JsonSerializer.Serialize(result1, new JsonSerializerOptions { WriteIndented = true }));
+                return result1.Success;
+            }
+
         }
         catch (Exception e)
         {
@@ -88,6 +85,7 @@ public class ListSkyApp
     {
         Console.WriteLine("Arguments: <command> [options]");
         Console.WriteLine("Commands:");
-        Console.WriteLine("  update - modify lists in BlueSky to match CSV provided");
+        Console.WriteLine("  apply    - modify lists in BlueSky to match authoritative CSV lists");
+        Console.WriteLine("  document - generate documentation pages for all lists");
     }
 }

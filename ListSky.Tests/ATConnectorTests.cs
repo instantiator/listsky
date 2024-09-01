@@ -100,6 +100,21 @@ public class ATConnectorTests
         }
     }
 
+    [TestMethod]
+    public async Task ATConnector_CanPost()
+    {
+        var config = Config.FromEnv();
+        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
+        var session = await connection.ConnectAsync();
+
+        var result = await connection.PostAsync("Unit test message");
+        Assert.IsNotNull(result);
+        Thread.Sleep(5000);
+
+        var deleted = await connection.DeletePostAsync(result.Uri!);
+        Assert.IsNotNull(deleted);
+    }
+
     private async Task DeleteAllUnitTestLists(ATConnection connection)
     {
         var allLists = await connection.GetListsAsync();

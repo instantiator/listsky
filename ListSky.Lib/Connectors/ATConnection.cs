@@ -146,6 +146,22 @@ public class ATConnection : IDisposable
         return result.HandleResult();
     }
 
+    public async Task<CreatePostResponse> PostAsync(string message)
+    {
+        RequireConnected();
+        await RateLimit();
+        var result = await protocol.Repo.CreatePostAsync(message);
+        return result.HandleResult()!;
+    }
+
+    public async Task<Success> DeletePostAsync(ATUri uri)
+    {
+        RequireConnected();
+        await RateLimit();
+        var result = await protocol.Repo.DeletePostAsync(uri.Rkey);
+        return result.HandleResult()!;
+    }
+
     // private async Task<ActorRecord?> GetProfileViaHandle()
     // {
     //     var profile = (await protocol.Identity.ResolveHandleAsync(ATHandle.Create(account)!)).HandleResult();
