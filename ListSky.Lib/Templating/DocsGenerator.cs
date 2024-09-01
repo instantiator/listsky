@@ -39,6 +39,10 @@ public class DocsGenerator
             var entries = config.ReadList(list.Path_CSV);
             var listModel = new ListModel()
             {
+                Server_AT = config.Server_AT,
+                AccountName_AT = config.AccountName_AT,
+                GitHub_Repo = config.GITHUB_REPO,
+                GitHub_User = config.GITHUB_USER,
                 Metadata = list,
                 Entries = entries
             };
