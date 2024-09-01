@@ -1,4 +1,4 @@
 Name,Type,Description,AccountName_BlueSky,Server_Mastodon,AccountName_Mastodon,AccountName_Twitter,AccountName_LinkedIn,AccountName_YouTube,AccountName_GitHub,Url_RssFeed,Url_Website,Url_Blog
-ListSky,Bot,"ListSky manages a number of open lists of people, organisations, communities and bots",,,,,,,,,https://instantiator.dev/listsky,
+ListSky,Bot,"ListSky manages a number of open lists of people, organisations, communities and bots",listsky.bsky.social,,,,,,,,https://instantiator.dev/listsky,
 Lewis Westbury,Individual,Lewis is a software developer working for the Collective Intelligence team at Nesta,instantiator.bsky.social,mastodon.social,instantiator,,lewiswestbury,,instantiator,https://instantiator.dev/index.xml,https://instantiator.dev,https://instantiator.dev
 Joshua Becker,Individual,Joshua is Assistant Professor at the UCL School of Management. His work is focused largely on collective intelligence.,joshuabecker.bsky.social,,,joshua_a_becker,collectivestudies,,,,https://www.joshua-becker.com/,
