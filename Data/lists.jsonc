@@ -8,7 +8,7 @@
     "Lists": [
         {
             "Title": "Collective Intelligentsia",
-            "Description": "A collection of Collective Intelligence practitioners, researchers, communities and bots working on new research, techniques, tools, and applications for CI.",
+            "Description": "A collection of Collective Intelligence practitioners, researchers, organisations, communities and bots working on new research, techniques, tools, and applications for CI.",
             "Slug": "collective-intelligentsia",
             "ListId": "3l33oll7bru2k",
             "Path_CSV": "Data/list-ci.csv",
