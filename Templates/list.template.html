@@ -47,11 +47,6 @@
 
       <p class="text-body-primary">{{Metadata.Description}}</p>
 
-      <p class="text-body-primary">
-        Source CSV:
-        <a target="_blank" href="https://github.com/{{GitHub_Repo}}/blob/main/{{Metadata.Path_CSV}}">{{Metadata.Path_CSV}}</a>
-      </p>
-
       <p class="text-body-secondary">
         Update this list by either
         <a target="_blank" href="https://github.com/{{GitHub_Repo}}/edit/main/{{Metadata.Path_CSV}}">creating a pull request</a>
@@ -59,11 +54,19 @@
         <a target="_blank" href="https://github.com/{{GitHub_Repo}}/issues/new/choose">submitting an issue</a>.
       </p>
 
-      <div class="my-1">
+      <div class="mt-1 mb-3">
         <a target="_blank" class="btn btn-sm btn-outline-primary mx-1" href="https://bsky.app/profile/{{AccountName_AT}}/lists/{{Metadata.ListId}}">
           See {{Metadata.Title}} on BlueSky
         </a>
+        <a target="_blank" class="btn btn-sm btn-outline-success mx-1" href="https://github.com/{{GitHub_Repo}}/blob/main/{{Metadata.Path_CSV}}">
+          See source CSV
+        </a>
       </div>
+
+      <!-- <p class="text-body-primary">
+        Source CSV:
+        <a target="_blank" href="https://github.com/{{GitHub_Repo}}/blob/main/{{Metadata.Path_CSV}}">{{Metadata.Path_CSV}}</a>
+      </p> -->
 
       <div class="my-3">
         <table class="table table-success table-striped-columns">
@@ -140,7 +143,9 @@
         <a target="_blank" class="btn btn-sm btn-outline-primary mx-1" href="https://bsky.app/profile/{{AccountName_AT}}/lists/{{Metadata.ListId}}">
           See {{Metadata.Title}} on BlueSky
         </a>
-
+        <a target="_blank" class="btn btn-sm btn-outline-success mx-1" href="https://github.com/{{GitHub_Repo}}/blob/main/{{Metadata.Path_CSV}}">
+          See source CSV
+        </a>
         <a target="_blank" class="btn btn-sm btn-outline-info mx-1" href="https://github.com/{{GitHub_Repo}}/edit/main/{{Metadata.Path_CSV}}">
           Create a pull request
         </a>
