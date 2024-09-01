@@ -5,7 +5,7 @@ using ListSky.Lib.ListManagement;
 
 namespace ListSky.Lib.Actions;
 
-public class ListResolutions : Dictionary<ListMetadata, ListManager.ListManagerActions>
+public class ListResolutions : List<KeyValuePair<ListMetadata, ListManager.ListManagerActions>>
 {
 }
 
@@ -70,11 +70,13 @@ public class ResolveListsAction : AbstractAction<ListResolutions>
             result.Outputs.Add($"{listData.Slug}: {successfulAdditions.Count} successful additions");
             result.Outputs.Add($"{listData.Slug}: {successfulRemovals.Count} successful removals");
 
-            resolution.Add(listData, new ListManager.ListManagerActions()
-            {
-                ToDelete = successfulRemovals,
-                ToAdd = successfulAdditions
-            });
+            resolution.Add(new KeyValuePair<ListMetadata, ListManager.ListManagerActions>(
+                listData,
+                new ListManager.ListManagerActions()
+                {
+                    ToDelete = successfulRemovals,
+                    ToAdd = successfulAdditions
+                }));
         }
 
         result.Data = resolution;
