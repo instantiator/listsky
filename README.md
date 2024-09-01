@@ -1,5 +1,7 @@
 # ListSky
 
+[![on-push-to-main](https://github.com/instantiator/listsky/actions/workflows/on-push-to-main.yaml/badge.svg)](https://github.com/instantiator/listsky/actions/workflows/on-push-to-main.yaml)
+
 ListSky is a repository app that can manage any number of BlueSky lists.
 
 When a pull request is merged to `main`, the contents of the `Data` directory are used to update each list on BlueSky.
