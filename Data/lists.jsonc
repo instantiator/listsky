@@ -1,8 +1,7 @@
 {
     "Title": "ListSky",
-    "Descriptions": [
-        "Featuring a number of BlueSky lists for open communities.",
-    ],
+    "Subtitle": "Featuring a number of BlueSky lists for open communities.",
+    "Descriptions": [],
     "Lists": [
         {
             "Title": "Collective Intelligentsia",
