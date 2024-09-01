@@ -6,7 +6,7 @@ ListSky is a repository app that can manage any number of BlueSky lists.
 
 When a pull request is merged to `main`, the contents of the `Data` directory are used to update each list on BlueSky.
 
-The application also publishes the contents of all lists through GitHub Pages.
+The application also publishes the contents of all lists through GitHub Pages. See: [ListSky](https://instantiator.dev/listsky)
 
 ## How to add people to these lists
 
@@ -31,7 +31,7 @@ This tool will update lists on BlueSky based on edits made to CSV files in the `
 1. Tests will run against your pull request to make sure there are no mistakes
 1. Your pull request will be reviewed, and if it passes it will be merged into the main repository
 
-If in doubt, ask a developer friend to help!
+Here's an [example pull request](https://github.com/instantiator/listsky/pull/9). If in doubt, ask a developer friend to help!
 
 ### 2. Create an issue (bit slower, bit less technical)
 
