@@ -11,6 +11,8 @@ public class Config
     public string AccountName_AT { get; set; } = null!;
     public string AppPassword_AT { get; set; } = null!;
     public string Path_AllListsMetadataJson { get; set; } = null!;
+    public string GITHUB_REPO { get; set; } = null!;
+    public string GITHUB_USER { get; set; } = null!;
 
     private static readonly JsonSerializerOptions options = new JsonSerializerOptions
     {
@@ -25,8 +27,6 @@ public class Config
         get
         {
             _allLists = _allLists ?? JsonSerializer.Deserialize<AllLists>(File.ReadAllText(Path_AllListsMetadataJson), options)!;
-            _allLists.AccountName_AT = AccountName_AT;
-            _allLists.Server_AT = Server_AT;
             return _allLists;
         }
     }
@@ -56,6 +56,8 @@ public class Config
             AccountName_AT = Environment.GetEnvironmentVariable("AccountName_AT") ?? throw new Exception("AccountName_BlueSky not set"),
             AppPassword_AT = Environment.GetEnvironmentVariable("AppPassword_AT") ?? throw new Exception("AppPassword_BlueSky not set"),
             Path_AllListsMetadataJson = Environment.GetEnvironmentVariable("Path_AllListsMetadataJson") ?? throw new Exception("Path_AllListsMetadataJson not set"),
+            GITHUB_REPO = Environment.GetEnvironmentVariable("GITHUB_REPO") ?? throw new Exception("GITHUB_REPO not set"),
+            GITHUB_USER = Environment.GetEnvironmentVariable("GITHUB_USER") ?? throw new Exception("GITHUB_USER not set"),
         };
     }
 }

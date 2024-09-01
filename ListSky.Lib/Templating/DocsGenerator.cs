@@ -22,6 +22,10 @@ public class DocsGenerator
         var overviewModel = new OverviewModel()
         {
             AllLists = config.AllListData,
+            Server_AT = config.Server_AT,
+            AccountName_AT = config.AccountName_AT,
+            GitHub_Repo = config.GITHUB_REPO,
+            GitHub_User = config.GITHUB_USER,
         };
 
         docs.Add(new DocFile()

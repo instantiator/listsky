@@ -97,14 +97,18 @@ To configure the runtime environment, provide values for the following GithHub A
 * `AppPassword_AT` (create an app password for this use case)
 * `Path_AllListsMetadataJson` (relative path to your config, probably best left as: `Data/lists.jsonc`)
 
-To test locally, create a file called `test.env` file in the root of this repository, and provide values for the same properties:
+To test locally, create a file called `test.env` file in the root of this repository, and provide values for these properties:
 
 ```env
 Server_AT=
 AccountName_AT=
 AppPassword_AT=
 Path_AllListsMetadataJson=
+GITHUB_REPO=
+GITHUB_USER=
 ```
+
+NB. `GITHUB_REPO` and `GITHUB_USER` are provided by GitHub Actions, so do not need to be provided as repository secrets.
 
 ## Developer notes
 

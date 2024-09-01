@@ -35,6 +35,8 @@ jobs:
           AccountName_AT: ${{ secrets.AccountName_AT }}
           AppPassword_AT: ${{ secrets.AppPassword_AT }}
           Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_USER: ${{ github.repository_owner }}
         run: |
           mkdir -p output-docs
           dotnet run --project ./ListSky.App/ListSky.App.csproj document $(readlink -f output-docs)

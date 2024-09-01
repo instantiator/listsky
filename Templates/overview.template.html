@@ -56,8 +56,8 @@
             <div class="card-body">
               <p class="text-body-secondary">{{Description}}</p>
               <!-- <a href="#link" class="btn btn-info" role="button">Link Button</a> -->
-              <a target="_blank" href="https://bsky.app/profile/{{../AccountName_AT}}/lists/{{ListId}}" class="w-40 mx-1 my-1 btn btn-outline-info">Visit on BlueSky...</a>
-              <a target="_blank" href="lists/{{Slug}}.html" class="w-40 mx-1 my-1 btn btn-outline-primary">See membership...</a>
+              <a target="_blank" class="w-40 mx-1 my-1 btn btn-outline-info" href="https://bsky.app/profile/{{../../AccountName_AT}}/lists/{{ListId}}">Visit on BlueSky...</a>
+              <a target="_blank" class="w-40 mx-1 my-1 btn btn-outline-primary" href="lists/{{Slug}}.html">See membership...</a>
             </div>
           </div>
         </div>
@@ -74,7 +74,8 @@
         </div>
 
         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li class="mb-3 mb-md-0"><a class="text-body-secondary" target="_blank" href="https://github.com/instantiator/listsky">Source code</a></li>
+          <li class="mb-3 mb-md-0"><a class="text-body-secondary" target="_blank" href="https://github.com/{{../GitHub_User}}/{{../GitHub_Repo}}/issues/new/choose">Submit an issue...</a></li>
+          <li class="mb-3 mb-md-0"><a class="text-body-secondary" target="_blank" href="https://github.com/instantiator/listsky">View source code</a></li>
         </ul>
       </footer>
     </div>
