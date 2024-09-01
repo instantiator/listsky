@@ -55,6 +55,8 @@ You can also add details of a number of other accounts:
   * Website url
   * Blog url
 
+This is a bit less technical - someone will review this and manually modify the list. It'll also go a bit slower as they have a little more work to do this way.
+
 ### Required fields
 
 Please ensure you provide a value for:
@@ -77,7 +79,7 @@ When editing a CSV record, note that it must have a value in the `Type` column. 
 
 **NB. Match the spelling and capitalisation above - in particular the UK English spelling of Organisation!**
 
-## Build your own ListSky
+# Build your own ListSky
 
 1. Fork this repository
 1. You may need to enable github actions through GitHub
@@ -88,7 +90,7 @@ When editing a CSV record, note that it must have a value in the `Type` column. 
 1. Set up branch protections to prevent accidental pushes to `main`
 1. Require that the tests pass before pull requests can be merged (use workflow `on-pull-request-run-tests`)
 
-### Configuration
+## Configuration
 
 To configure the runtime environment, provide values for the following GithHub Actions repository secrets:
 
@@ -110,9 +112,9 @@ GITHUB_USER=
 
 NB. `GITHUB_REPO` and `GITHUB_USER` are provided by GitHub Actions, so do not need to be provided as repository secrets.
 
-## Developer notes
+# Developer notes
 
-### Build and test locally
+## Build and test locally
 
 Use the `run-tests.sh` script. This will first source environment variables from your `test.env` file - so that you can test from 
 
@@ -128,7 +130,7 @@ Use the `test-app.sh` script with the `apply` command to run the application wit
 ./test-app.sh apply
 ```
 
-### Testing workflows
+## Testing workflows
 
 Install [act](https://nektosact.com/installation/index.html) and the GitHub CLI...
 
