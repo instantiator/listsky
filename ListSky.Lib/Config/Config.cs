@@ -19,7 +19,17 @@ public class Config
         ReadCommentHandling = JsonCommentHandling.Skip,
     };
 
-    public AllLists AllListData => JsonSerializer.Deserialize<AllLists>(File.ReadAllText(Path_AllListsMetadataJson), options)!;
+    private AllLists? _allLists = null;
+    public AllLists AllListData
+    {
+        get
+        {
+            _allLists = _allLists ?? JsonSerializer.Deserialize<AllLists>(File.ReadAllText(Path_AllListsMetadataJson), options)!;
+            _allLists.AccountName_AT = AccountName_AT;
+            _allLists.Server_AT = Server_AT;
+            return _allLists;
+        }
+    }
 
     public IEnumerable<ListEntry> ReadList(string path)
     {

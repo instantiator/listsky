@@ -33,6 +33,11 @@
       <div class="col-lg-6 mx-auto">
         <p class="lead mb-4">{{SubTitle}}</p>
       </div>
+      <div class="col-lg-6 mx-auto">
+        {{#each Descriptions}}
+        <p class="text-body-primary">{{this}}</p>
+        {{/each}}
+      </div>
     </div>
 
     <!-- <div class="b-example-divider"></div> -->
@@ -47,7 +52,9 @@
           </div>
           <div class="card-body">
             <p class="text-body-secondary">{{Description}}</p>
-            <button type="button" class="w-100 btn btn-lg btn-outline-primary">See membership...</button>
+            <!-- <a href="#link" class="btn btn-info" role="button">Link Button</a> -->
+            <a href="https://bsky.app/profile/{{../AccountName_AT}}/lists/{{ListId}}" class="w-40 mx-1 btn btn-lg btn-outline-info">Visit on BlueSky...</a>
+            <a href="lists/{{Slug}}.html" class="w-40 mx-1 btn btn-lg btn-outline-primary">See membership...</a>
           </div>
         </div>
       </div>

@@ -1,7 +1,10 @@
 {
     "Title": "ListSky",
     "Subtitle": "Featuring a number of BlueSky lists for open communities.",
-    "Descriptions": [],
+    "Descriptions": [
+        "ListSky is a collaborative list manager for social networks, primarily BlueSky.",
+        "Contribute by submitting updates to a list."
+    ],
     "Lists": [
         {
             "Title": "Collective Intelligentsia",
