@@ -13,6 +13,15 @@
             "ListId": "3l33oll7bru2k",
             "Path_CSV": "Data/list-ci.csv",
             "Publish": true
+        },
+        {
+            "Title": "List Trek",
+            "Description": "A collection of accounts posting art and commentary on Star Trek.",
+            "Slug": "trek",
+            "ListId": "3l35pfxac7i2r",
+            "Path_CSV": "Data/list-trek.csv",
+            "Publish": true
         }
+
     ]
 }
