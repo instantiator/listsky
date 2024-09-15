@@ -37,8 +37,8 @@ public class ATConnection : IDisposable
         var elapsed = now - lastAction;
         if (elapsed.TotalMilliseconds < RATE_ms)
         {
-            var delay = RATE_ms - (int)elapsed.TotalMilliseconds;
-            await Task.Delay(delay);
+            var delay = RATE_ms - elapsed.TotalMilliseconds;
+            await Task.Delay((int)delay);
         }
         lastAction = now; 
     }

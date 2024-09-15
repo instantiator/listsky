@@ -31,6 +31,7 @@ public abstract class AbstractATConnectedTests
 
     protected async Task DeleteAllUnitTestLists()
     {
+        if (!connection.Connected) return;
         var allLists = await connection.GetListsAsync();
         var deleteLists = allLists.Where(l => l.Name.StartsWith("Unit test"));
         var deleted = 0;
