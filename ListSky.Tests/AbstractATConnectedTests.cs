@@ -9,13 +9,18 @@ public abstract class AbstractATConnectedTests
     protected static Config config = null!;
     protected static ATConnection connection = null!;
     protected static Session? session;
+    protected static bool connected = false;
 
     [TestInitialize]
     public async Task InitTest()
     {
-        config = config ?? Config.FromEnv();
-        connection = connection ?? new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        session = session ?? await connection.ConnectAsync();
+        if (!connected)
+        {
+            config = config ?? Config.FromEnv();
+            connection = connection ?? new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
+            session = session ?? await connection.ConnectAsync();
+            connected = true;
+        }
     } 
 
     [TestCleanup]
