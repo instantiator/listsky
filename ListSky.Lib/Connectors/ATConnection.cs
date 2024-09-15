@@ -146,11 +146,11 @@ public class ATConnection : IDisposable
         return result.HandleResult();
     }
 
-    public async Task<CreatePostResponse> PostAsync(string message)
+    public async Task<CreatePostResponse> PostAsync(string message, IEnumerable<Facet>? facets = null)
     {
         RequireConnected();
         await RateLimit();
-        var result = await protocol.Repo.CreatePostAsync(message);
+        var result = await protocol.Repo.CreatePostAsync(message, facets?.ToArray());
         return result.HandleResult()!;
     }
 

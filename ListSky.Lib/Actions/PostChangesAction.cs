@@ -1,5 +1,6 @@
 
 using FishyFlip.Models;
+using ListSky.Lib.Composition;
 using ListSky.Lib.DTO;
 using ListSky.Lib.ListManagement;
 
@@ -16,10 +17,12 @@ public class PostSummary
 public class PostChangesAction : AbstractAction<IEnumerable<PostSummary>>
 {
     protected ListResolutions resolutions;
+    protected MessageComposer composer;
 
     public PostChangesAction(Config config, ListResolutions resolutions) : base(config)
     {
         this.resolutions = resolutions;
+        this.composer = new MessageComposer(connection);
     }
 
     protected override async Task<bool> ExecuteImplementationAsync(ActionResult<IEnumerable<PostSummary>> result)
@@ -30,13 +33,19 @@ public class PostChangesAction : AbstractAction<IEnumerable<PostSummary>>
         {
             foreach (var addition in listResolution.Value.ToAdd)
             {
-                var message = $"➕ Added {addition.Name}, @{addition.AccountName_BlueSky} to list: {listResolution.Key.Title}";
+                var values = new Dictionary<string, string>()
+                {
+                    { "account", addition.AccountName_BlueSky },
+                    { "listName", listResolution.Key.Title },
+                    { "listUrl", $"https://bsky.app/profile/{config.AccountName_AT}/lists/{listResolution.Key.ListId}" },
+                };
+                Tuple<string, IEnumerable<Facet>> data = await composer.ComposeAsync(Composition.Composition.AddedPersonToList, values);
                 try
                 {
-                    var response = await connection.PostAsync(message);
+                    var response = await connection.PostAsync(data.Item1, data.Item2);
                     results.Add(new PostSummary
                     {
-                        Message = message,
+                        Message = data.Item1,
                         Response = response,
                         Succeeded = response != null
                     });
@@ -45,7 +54,7 @@ public class PostChangesAction : AbstractAction<IEnumerable<PostSummary>>
                 {
                     results.Add(new PostSummary
                     {
-                        Message = message,
+                        Message = data.Item1,
                         Succeeded = false,
                         Exception = e,
                         Response = null
