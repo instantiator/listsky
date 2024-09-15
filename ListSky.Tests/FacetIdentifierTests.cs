@@ -7,18 +7,13 @@ using ListSky.Lib.DTO;
 namespace ListSky.Tests;
 
 [TestClass]
-public class FacetIdentifierTests
+public class FacetIdentifierTests : AbstractATConnectedTests
 {
-    private ATConnection connection = null!;
     private ATFacetIdentifier identifier = null!;
-    private Session? session;
 
     [TestInitialize]
-    public async Task TestInit()
+    public void TestInit()
     {
-        var config = Config.FromEnv();
-        connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        session = await connection.ConnectAsync();
         identifier = new ATFacetIdentifier(connection);
     }
 

@@ -6,9 +6,8 @@ using ListSky.Lib.ListManagement;
 namespace ListSky.Tests;
 
 [TestClass]
-public class DataTests
+public class DataTests : AbstractATConnectedTests
 {
-
     [TestMethod]
     public void AllLists_HaveRequiredFields()
     {
@@ -39,10 +38,6 @@ public class DataTests
     [TestMethod]
     public async Task AT_PublishedLists_Exist()
     {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
-
         var atLists = await connection.GetListsAsync();
         foreach (var list in config.AllListData.Lists)
         {
@@ -54,10 +49,6 @@ public class DataTests
     [TestMethod]
     public async Task AT_NewListEntries_ExistOnSocialNetwork()
     {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
-
         foreach (var list in config.AllListData.Lists)
         {
             var authoritativeEntries = config.ReadList(list.Path_CSV);

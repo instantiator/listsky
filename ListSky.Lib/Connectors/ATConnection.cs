@@ -40,6 +40,7 @@ public class ATConnection : IDisposable
             var delay = RATE_ms - (int)elapsed.TotalMilliseconds;
             await Task.Delay(delay);
         }
+        lastAction = now; 
     }
 
     public async Task<Session?> ConnectAsync()

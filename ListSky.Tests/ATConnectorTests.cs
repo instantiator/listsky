@@ -1,26 +1,12 @@
-using ListSky.Lib.Connectors;
-using ListSky.Lib.DTO;
-
 namespace ListSky.Tests;
 
 [TestClass]
-public class ATConnectorTests
+public class ATConnectorTests : AbstractATConnectedTests
 {
-    [TestCleanup]
-    public async Task CleanUp()
-    {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
-        await DeleteAllUnitTestLists(connection);
-    }
 
     [TestMethod]
-    public async Task ATConnector_CanConnect()
+    public void ATConnector_CanConnect()
     {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
         Assert.IsNotNull(session);
         Assert.IsTrue(connection.Connected);
     }
@@ -28,9 +14,6 @@ public class ATConnectorTests
     [TestMethod]
     public async Task ATConnector_CanGetLists()
     {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
         var lists = await connection.GetListsAsync();
         Assert.IsNotNull(lists);
     }
@@ -38,9 +21,6 @@ public class ATConnectorTests
     [TestMethod]
     public async Task ATConnector_CanCreateList()
     {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
         var list = await connection.CreateListAsync("Unit test list");
         Assert.IsNotNull(list);
 
@@ -51,10 +31,6 @@ public class ATConnectorTests
     [TestMethod]
     public async Task ATConnector_CanAddAndRemovePersonFromList()
     {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
-
         // create list
         var list = await connection.CreateListAsync("Unit test list");
 
@@ -103,10 +79,6 @@ public class ATConnectorTests
     [TestMethod]
     public async Task ATConnector_CanPost()
     {
-        var config = Config.FromEnv();
-        var connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
-        var session = await connection.ConnectAsync();
-
         var result = await connection.PostAsync("Unit test message");
         Assert.IsNotNull(result);
         Thread.Sleep(5000);
@@ -115,17 +87,15 @@ public class ATConnectorTests
         Assert.IsNotNull(deleted);
     }
 
-    private async Task DeleteAllUnitTestLists(ATConnection connection)
+    [TestMethod]
+    public async Task ATConnector_CanPostWithFacets()
     {
-        var allLists = await connection.GetListsAsync();
-        var deleteLists = allLists.Where(l => l.Name.StartsWith("Unit test"));
-        var deleted = 0;
-        foreach (var deleteList in deleteLists)
-        {
-            var deleteListOk = await connection.DeleteListAsync(deleteList.Uri);
-            if (deleteListOk != null) deleted++;
-        }
-        Assert.AreEqual(deleteLists.Count(), deleted);
+        var result = await connection.PostAsync("Unit test message @instantiator.bsky.social has a blog at https://instantiator.dev");
+        Assert.IsNotNull(result);
+        Thread.Sleep(5000);
+
+        var deleted = await connection.DeletePostAsync(result.Uri!);
+        Assert.IsNotNull(deleted);
     }
 
 }
