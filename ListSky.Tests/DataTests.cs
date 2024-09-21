@@ -1,11 +1,11 @@
 using System.Text.Json;
-using ListSky.Lib.Connectors;
+using ListSky.Lib.BlueSky.ListManagement;
 using ListSky.Lib.DTO;
-using ListSky.Lib.ListManagement;
 
 namespace ListSky.Tests;
 
 [TestClass]
+[TestCategory("Config")]
 public class DataTests : AbstractATConnectedTests
 {
     [TestMethod]

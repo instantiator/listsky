@@ -1,8 +1,7 @@
 
 using FishyFlip.Models;
-using ListSky.Lib.Composition;
+using ListSky.Lib.BlueSky.Composition;
 using ListSky.Lib.DTO;
-using ListSky.Lib.ListManagement;
 
 namespace ListSky.Lib.Actions;
 
@@ -39,7 +38,7 @@ public class PostChangesAction : AbstractAction<IEnumerable<PostSummary>>
                     { "listName", listResolution.Key.Title },
                     { "listUrl", $"https://bsky.app/profile/{config.AccountName_AT}/lists/{listResolution.Key.ListId}" },
                 };
-                Tuple<string, IEnumerable<Facet>> data = await composer.ComposeAsync(Composition.Composition.AddedPersonToList, values);
+                Tuple<string, IEnumerable<Facet>> data = await composer.ComposeAsync(Composition.AddedPersonToList, values);
                 try
                 {
                     var response = await connection.PostAsync(data.Item1, data.Item2);

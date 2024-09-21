@@ -1,6 +1,7 @@
 namespace ListSky.Tests;
 
 [TestClass]
+[TestCategory("BlueSky")]
 public class ATConnectorTests : AbstractATConnectedTests
 {
 

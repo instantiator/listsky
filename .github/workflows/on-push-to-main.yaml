@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   run-tests:
-    uses: ./.github/workflows/run-tests.yaml
+    uses: ./.github/workflows/actions/run-tests.yaml
     secrets:
       Server_AT: ${{ secrets.Server_AT }}
       AccountName_AT: ${{ secrets.AccountName_AT }}
@@ -26,7 +26,7 @@ jobs:
 
   apply:
     needs: run-tests
-    uses: ./.github/workflows/push-to-bluesky.yaml
+    uses: ./.github/workflows/actions/push-to-social.yaml
     secrets:
         Server_AT: ${{ secrets.Server_AT }}
         AccountName_AT: ${{ secrets.AccountName_AT }}
@@ -35,7 +35,7 @@ jobs:
 
   document-lists:
     needs: apply
-    uses: ./.github/workflows/document-lists.yaml
+    uses: ./.github/workflows/actions/document-lists.yaml
     secrets:
         Server_AT: ${{ secrets.Server_AT }}
         AccountName_AT: ${{ secrets.AccountName_AT }}

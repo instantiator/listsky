@@ -1,13 +1,14 @@
 using System.Text.RegularExpressions;
-using ListSky.Lib.Composition;
+using ListSky.Lib.BlueSky.Composition;
 
 namespace ListSky.Tests;
 
 [TestClass]
+[TestCategory("BlueSky")]
 public class RegexTests
 {
     [TestMethod]
-    public void RGX_IDENTIFIERS_CanIdentify_Identifiers()
+    public void RGX_IDENTIFIERS_CanIdentify_Mentions()
     {
         var text = "Hello @world! @foo @bar.some.thing @baz.some-thing.com";
         var matches = Regex.Matches(text, ATFacetIdentifier.RGX_MENTIONS);

@@ -3,6 +3,7 @@ using ListSky.Lib.DTO;
 namespace ListSky.Tests;
 
 [TestClass]
+[TestCategory("Config")]
 public class ConfigTests
 {
     [TestMethod]

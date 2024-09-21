@@ -1,10 +1,10 @@
-using ListSky.Lib.Connectors;
+using ListSky.Lib.BlueSky.ListManagement;
 using ListSky.Lib.DTO;
-using ListSky.Lib.ListManagement;
 
 namespace ListSky.Tests;
 
 [TestClass]
+[TestCategory("BlueSky")]
 public class ListManagerTests : AbstractATConnectedTests
 {
 

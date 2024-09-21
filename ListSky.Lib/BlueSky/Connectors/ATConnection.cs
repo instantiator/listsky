@@ -3,7 +3,7 @@ using FishyFlip;
 using FishyFlip.Models;
 using FishyFlip.Tools;
 
-namespace ListSky.Lib.Connectors;
+namespace ListSky.Lib.BlueSky.Connectors;
 
 public class ATConnection : IDisposable
 {

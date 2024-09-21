@@ -1,8 +1,8 @@
 using System.Text.Json;
 using FishyFlip.Models;
-using ListSky.Lib.Connectors;
+using ListSky.Lib.BlueSky.Connectors;
 
-namespace ListSky.Lib.Composition;
+namespace ListSky.Lib.BlueSky.Composition;
 
 public enum Composition { AddedPersonToList };
 

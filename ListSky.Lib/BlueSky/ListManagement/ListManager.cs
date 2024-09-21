@@ -1,7 +1,7 @@
 using FishyFlip.Models;
 using ListSky.Lib.DTO;
 
-namespace ListSky.Lib.ListManagement;
+namespace ListSky.Lib.BlueSky.ListManagement;
 public class ListManager
 {
 

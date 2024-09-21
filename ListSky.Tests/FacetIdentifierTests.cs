@@ -1,12 +1,10 @@
 using System.Text.RegularExpressions;
-using FishyFlip.Models;
-using ListSky.Lib.Composition;
-using ListSky.Lib.Connectors;
-using ListSky.Lib.DTO;
+using ListSky.Lib.BlueSky.Composition;
 
 namespace ListSky.Tests;
 
 [TestClass]
+[TestCategory("BlueSky")]
 public class FacetIdentifierTests : AbstractATConnectedTests
 {
     private ATFacetIdentifier identifier = null!;

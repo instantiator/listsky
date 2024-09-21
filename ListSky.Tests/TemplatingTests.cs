@@ -5,6 +5,7 @@ using ListSky.Lib.Templating;
 namespace ListSky.Tests;
 
 [TestClass]
+[TestCategory("Templates")]
 public class TemplatingTests
 {
     [TestMethod]

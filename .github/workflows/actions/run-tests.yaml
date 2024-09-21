@@ -1,0 +1,92 @@
+name: run-tests
+
+on:
+  workflow_call:
+    secrets:
+      Server_AT:
+        required: true
+      AccountName_AT:
+        required: true
+      AppPassword_AT:
+        required: true
+      Path_AllListsMetadataJson:
+        required: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      BlueSky: ${{ steps.filter.outputs.BlueSky }}
+      Config: ${{ steps.filter.outputs.Config }}
+      Templates: ${{ steps.filter.outputs.Templates }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            BlueSky:
+              - 'ListSky.Lib/BlueSky/**'
+            Config:
+              - 'Data/**'
+              - 'ListSky.Lib/Config/**'
+              - 'ListSky.Lib/DTO/**'
+            Templates:
+              - 'Templates/**'
+
+  run-all-tests:
+    runs-on: ubuntu-latest
+    needs: changes
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: '8'
+
+      - name: Restore packages
+        run: dotnet restore --locked-mode
+
+      - name: Build solution
+        run: dotnet build
+
+      - name: Run Config tests
+        if: ${{ needs.changes.outputs.Config == 'true' }}
+        env:
+            Server_AT: ${{ secrets.Server_AT }}
+            AccountName_AT: ${{ secrets.AccountName_AT }}
+            AppPassword_AT: ${{ secrets.AppPassword_AT }}
+            Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+            GITHUB_REPO: ${{ github.repository }}
+            GITHUB_USER: ${{ github.repository_owner }}
+        run: |
+          dotnet test --verbosity:normal --filter TestCategory=Config
+
+      - name: Run BlueSky tests
+        if: ${{ needs.changes.outputs.Config == 'true' }}
+        env:
+            Server_AT: ${{ secrets.Server_AT }}
+            AccountName_AT: ${{ secrets.AccountName_AT }}
+            AppPassword_AT: ${{ secrets.AppPassword_AT }}
+            Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+            GITHUB_REPO: ${{ github.repository }}
+            GITHUB_USER: ${{ github.repository_owner }}
+        run: |
+          dotnet test --verbosity:normal --filter TestCategory=BlueSky
+
+          - name: Run Templates tests
+          if: ${{ needs.changes.outputs.Config == 'true' }}
+          env:
+              Server_AT: ${{ secrets.Server_AT }}
+              AccountName_AT: ${{ secrets.AccountName_AT }}
+              AppPassword_AT: ${{ secrets.AppPassword_AT }}
+              Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+              GITHUB_REPO: ${{ github.repository }}
+              GITHUB_USER: ${{ github.repository_owner }}
+          run: |
+            dotnet test --verbosity:normal --filter TestCategory=Templates
+  
