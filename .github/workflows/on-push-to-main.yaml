@@ -19,6 +19,8 @@ permissions:
 jobs:
   run-tests:
     uses: ./.github/workflows/run-tests.yaml
+    permissions:
+      pull-requests: read
     secrets:
       Server_AT: ${{ secrets.Server_AT }}
       AccountName_AT: ${{ secrets.AccountName_AT }}
