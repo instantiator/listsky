@@ -5,5 +5,6 @@ public enum ListEntryType
     Individual,
     Organisation,
     Community,
+    Project,
     Bot
 }
