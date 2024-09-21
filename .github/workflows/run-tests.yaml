@@ -68,7 +68,7 @@ jobs:
           dotnet test --verbosity:normal --filter TestCategory=Config
 
       - name: Run BlueSky tests
-        if: ${{ needs.changes.outputs.Config == 'true' }}
+        if: ${{ needs.changes.outputs.BlueSky == 'true' }}
         env:
             Server_AT: ${{ secrets.Server_AT }}
             AccountName_AT: ${{ secrets.AccountName_AT }}
@@ -80,7 +80,7 @@ jobs:
           dotnet test --verbosity:normal --filter TestCategory=BlueSky
 
       - name: Run Templates tests
-        if: ${{ needs.changes.outputs.Config == 'true' }}
+        if: ${{ needs.changes.outputs.Templates == 'true' }}
         env:
             Server_AT: ${{ secrets.Server_AT }}
             AccountName_AT: ${{ secrets.AccountName_AT }}
