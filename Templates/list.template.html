@@ -63,80 +63,77 @@
         </a>
       </div>
 
-      <!-- <p class="text-body-primary">
-        Source CSV:
-        <a target="_blank" href="https://github.com/{{GitHub_Repo}}/blob/main/{{Metadata.Path_CSV}}">{{Metadata.Path_CSV}}</a>
-      </p> -->
-
-      <div class="my-3">
-        <table class="table table-success table-striped-columns">
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Type</th>
-            <th scope="col">BlueSky</th>
-            <th scope="col">Mastodon</th>
-            <th scope="col">Twitter</th>
-            <th scope="col">LinkedIn</th>
-            <th scope="col">YouTube</th>
-            <th scope="col">GitHub</th>
-            <th scope="col">RSS</th>
-            <th scope="col">Website</th>
-            <th scope="col">Blog</th>
-          </tr>
-          {{#each Entries}}
-          <tr>
-            <th scope="row">{{Name}}</th>
-            <td>{{Description}}</td>
-            <td>{{Type}}</td>
-            <td>
-              {{#if AccountName_BlueSky}}
-              <a href="https://bsky.app/profile/{{AccountName_BlueSky}}" target="_blank">{{AccountName_BlueSky}}</a>
-              {{/if}}
-            </td>
-            <td>
-              {{#if AccountName_Mastodon}}
-              <a href="https://{{Server_Mastodon}}/@{{AccountName_Mastodon}}" target="_blank">{{AccountName_Mastodon}}</a>
-              {{/if}}
-            </td>
-            <td>
-              {{#if AccountName_Twitter}}
-              <a href="https://x.com/{{AccountName_Twitter}}" target="_blank">{{AccountName_Twitter}}</a>
-              {{/if}}
-            </td>
-            <td>
-              {{#if AccountName_LinkedIn}}
-              <a href="https://www.linkedin.com/in/{{AccountName_LinkedIn}}" target="_blank">{{AccountName_LinkedIn}}</a>
-              {{/if}}
-            </td>
-            <td>
-              {{#if AccountName_YouTube}}
-              <a href="https://www.youtube.com/{{AccountName_YouTube}}" target="_blank">{{AccountName_YouTube}}</a>
-              {{/if}}
-            </td>
-            <td>
-              {{#if AccountName_GitHub}}
-              <a href="https://github.com/{{AccountName_GitHub}}" target="_blank">{{AccountName_GitHub}}</a>
-              {{/if}}
-            </td>
-            <td>
-              {{#if Url_RssFeed}}
-              <a href="{{Url_RssFeed}}" target="_blank">RSS</a>
-              {{/if}}
-            </td>
-            <td>
-              {{#if Url_Website}}
-              <a href="{{Url_Website}}" target="_blank">Website</a>
-              {{/if}}
-            </td>
-            <td>
-              {{#if Url_Blog}}
-              <a href="{{Url_Blog}}" target="_blank">Blog</a>
-              {{/if}}
-            </td>
-          </tr>
-          {{/each}}
-        </table>
+      <div class="my-3" style="overflow: hidden; border-radius: 0.5rem;">
+        <div style="width: 100%; overflow-x: scroll">
+          <table class="table table-success table-striped-columns">
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">BlueSky</th>
+              <th scope="col">Mastodon</th>
+              <th scope="col">Twitter</th>
+              <th scope="col">LinkedIn</th>
+              <th scope="col">YouTube</th>
+              <th scope="col">GitHub</th>
+              <th scope="col">RSS</th>
+              <th scope="col">Website</th>
+              <th scope="col">Blog</th>
+            </tr>
+            {{#each Entries}}
+            <tr>
+              <th scope="row">{{Name}}</th>
+              <td>{{Description}}</td>
+              <td>{{Type}}</td>
+              <td>
+                {{#if AccountName_BlueSky}}
+                <a href="https://bsky.app/profile/{{AccountName_BlueSky}}" target="_blank">{{AccountName_BlueSky}}</a>
+                {{/if}}
+              </td>
+              <td>
+                {{#if AccountName_Mastodon}}
+                <a href="https://{{Server_Mastodon}}/@{{AccountName_Mastodon}}" target="_blank">{{AccountName_Mastodon}}</a>
+                {{/if}}
+              </td>
+              <td>
+                {{#if AccountName_Twitter}}
+                <a href="https://x.com/{{AccountName_Twitter}}" target="_blank">{{AccountName_Twitter}}</a>
+                {{/if}}
+              </td>
+              <td>
+                {{#if AccountName_LinkedIn}}
+                <a href="https://www.linkedin.com/in/{{AccountName_LinkedIn}}" target="_blank">{{AccountName_LinkedIn}}</a>
+                {{/if}}
+              </td>
+              <td>
+                {{#if AccountName_YouTube}}
+                <a href="https://www.youtube.com/{{AccountName_YouTube}}" target="_blank">{{AccountName_YouTube}}</a>
+                {{/if}}
+              </td>
+              <td>
+                {{#if AccountName_GitHub}}
+                <a href="https://github.com/{{AccountName_GitHub}}" target="_blank">{{AccountName_GitHub}}</a>
+                {{/if}}
+              </td>
+              <td>
+                {{#if Url_RssFeed}}
+                <a href="{{Url_RssFeed}}" target="_blank">RSS</a>
+                {{/if}}
+              </td>
+              <td>
+                {{#if Url_Website}}
+                <a href="{{Url_Website}}" target="_blank">Website</a>
+                {{/if}}
+              </td>
+              <td>
+                {{#if Url_Blog}}
+                <a href="{{Url_Blog}}" target="_blank">Blog</a>
+                {{/if}}
+              </td>
+            </tr>
+            {{/each}}
+          </table>
+          </div>
       </div>
 
       <div class="my-1">
@@ -149,9 +146,7 @@
         <a target="_blank" class="btn btn-sm btn-outline-info mx-1" href="https://github.com/{{GitHub_Repo}}/edit/main/{{Metadata.Path_CSV}}">
           Create a pull request
         </a>
-        <a target="_blank" class="btn btn-sm btn-outline-secondary mx-1" href="https://github.com/{{GitHub_Repo}}/issues/new/choose">
-          Submit an issue
-        </a>
+        <a target="_blank" class="btn btn-sm btn-outline-secondary mx-1" href="https://github.com/{{GitHub_Repo}}/issues/new/choose"> Submit an issue </a>
       </div>
 
       <!-- footer -->
