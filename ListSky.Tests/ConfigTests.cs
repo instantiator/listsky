@@ -1,4 +1,4 @@
-using ListSky.Lib.DTO;
+using ListSky.Lib.Config;
 
 namespace ListSky.Tests;
 

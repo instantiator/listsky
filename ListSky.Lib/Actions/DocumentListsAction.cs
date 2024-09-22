@@ -8,7 +8,7 @@ public class DocumentListsAction : AbstractAction<IEnumerable<DocFile>>
 {
     protected string targetPath;
 
-    public DocumentListsAction(Config config, string targetPath) : base(config)
+    public DocumentListsAction(Config.Config config, string targetPath) : base(config)
     {
         this.targetPath = targetPath;
     }
@@ -25,7 +25,7 @@ public class DocumentListsAction : AbstractAction<IEnumerable<DocFile>>
         var listsPath = Path.Combine(targetPath, "lists");
         if (!Directory.Exists(listsPath)) Directory.CreateDirectory(listsPath);
 
-        var config = Config.FromEnv();
+        var config = Config.Config.FromEnv();
         var files = DocsGenerator.Render(config);
 
         foreach (var file in files)

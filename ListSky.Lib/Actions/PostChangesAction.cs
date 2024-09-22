@@ -18,7 +18,7 @@ public class PostChangesAction : AbstractAction<IEnumerable<PostSummary>>
     protected ListResolutions resolutions;
     protected MessageComposer composer;
 
-    public PostChangesAction(Config config, ListResolutions resolutions) : base(config)
+    public PostChangesAction(Config.Config config, ListResolutions resolutions) : base(config)
     {
         this.resolutions = resolutions;
         this.composer = new MessageComposer(connection);

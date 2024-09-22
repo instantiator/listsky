@@ -4,7 +4,7 @@ using ListSky.Lib.BlueSky.Composition;
 namespace ListSky.Tests;
 
 [TestClass]
-[TestCategory("BlueSky")]
+[TestCategory("Unit")]
 public class RegexTests
 {
     [TestMethod]

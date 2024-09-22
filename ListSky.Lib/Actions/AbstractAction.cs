@@ -1,16 +1,15 @@
 using FishyFlip.Models;
 using ListSky.Lib.BlueSky.Connectors;
-using ListSky.Lib.DTO;
 
 namespace ListSky.Lib.Actions;
 
 public abstract class AbstractAction<DataType>
 {
-    protected Config config;
+    protected Config.Config config;
     protected ATConnection connection;
     protected Session? session;
 
-    public AbstractAction(Config config)
+    public AbstractAction(Config.Config config)
     {
         this.config = config;
         this.connection = new ATConnection(config.Server_AT, config.AccountName_AT, config.AppPassword_AT);
