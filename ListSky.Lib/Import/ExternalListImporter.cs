@@ -39,7 +39,7 @@ public class ExternalListImporter(ListMetadata metadata, string providence, Exte
     {
         var relevantCurrentEntries = allEntries.Where(e => e.Providence == providence);
         var relevantEntries_add = newEntries.Where(e => !relevantCurrentEntries.Any(re => re.IsProbably(e)));
-        var relevantEntries_update = newEntries.Where(e => relevantCurrentEntries.Any(re => re.IsProbably(e)));
+        var relevantEntries_update = newEntries.Where(e => relevantCurrentEntries.Any(re => re.IsProbably(e) && re.DiffersTo(e)));
         var relevantEntries_remove = relevantCurrentEntries.Where(re => !newEntries.Any(e => e.IsProbably(re)));
 
         return new ExternalSourceReport
@@ -54,9 +54,16 @@ public class ExternalListImporter(ListMetadata metadata, string providence, Exte
     private IEnumerable<ListEntry> ApplyChanges(IEnumerable<ListEntry> currentEntries, IEnumerable<ListEntry> add, IEnumerable<ListEntry> update, IEnumerable<ListEntry> remove)
     {
         IEnumerable<ListEntry> modifiedList = new List<ListEntry>(currentEntries);
+
+        // remove entries indicated in the remove list
         modifiedList = modifiedList.Where(e => !remove.Any(r => r.IsProbably(e))).ToList();
-        modifiedList = modifiedList.Select(e => update.FirstOrDefault(u => u.IsProbably(e))?.UpdateInto(e) ?? e).ToList();
+
+        // select updated entries where found in the update list, otherwise keep the original entry
+        modifiedList = modifiedList.Select(e => update.FirstOrDefault(u => u.IsProbably(e))?.UpdateInto(e) ?? e);
+
+        // concatenate the add list to the end
         modifiedList = modifiedList.Concat(add);
+
         return modifiedList;
     }
 }

@@ -20,14 +20,35 @@ public class ListSkyApp
                 return applyResult ? 0 : 1;
 
             case "document":
-                var target = args[1];
-                var docResult = await DocumentListsAsync(target);
+                var docTarget = args[1];
+                var docResult = await DocumentListsAsync(docTarget);
                 return docResult ? 0 : 1;
+
+            case "import":
+                var importResult = await ImportExternalSourcesAsync();
+                return importResult ? 0 : 1;
 
             default:
                 Console.WriteLine("Unknown command: " + args[0]);
                 PrintArgs();
                 return 1;
+        }
+    }
+
+    private static async Task<bool> ImportExternalSourcesAsync()
+    {
+        try
+        {
+            var config = Config.FromEnv();
+            var action = new ImportExternalSourcesAction(config);
+            var result = await action.ExecuteAsync();
+            Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
+            return result.Success;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
         }
     }
 
@@ -83,6 +104,7 @@ public class ListSkyApp
     {
         Console.WriteLine("Arguments: <command> [options]");
         Console.WriteLine("Commands:");
+        Console.WriteLine("  import   - import from external sources into lists");
         Console.WriteLine("  apply    - modify lists in BlueSky to match authoritative CSV lists");
         Console.WriteLine("  document - generate documentation pages for all lists");
     }

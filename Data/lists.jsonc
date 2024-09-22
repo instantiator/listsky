@@ -12,7 +12,7 @@
             "Slug": "collective-intelligentsia",
             "ListId": "3l33oll7bru2k",
             "Path_CSV": "Data/list-ci.csv",
-            "EternalSources_CSV": [
+            "ExternalSources_CSV": [
                 "https://docs.google.com/spreadsheets/d/e/2PACX-1vSD7EtY6pg1Bk2OMmQzScWfgfKx7mJFkeLpHsN_DFd9qVSs6o6z5RGHAX_q1iW5b0O9rhOm5h4sxWEv/pub?gid=125969614&single=true&output=csv"
             ],
             "ExternalSources_JSON": [],
