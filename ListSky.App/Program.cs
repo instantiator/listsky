@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using ListSky.Lib.Actions;
-using ListSky.Lib.DTO;
+using ListSky.Lib.Config;
 
 namespace ListSky.App;
 

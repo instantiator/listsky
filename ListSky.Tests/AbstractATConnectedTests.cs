@@ -1,6 +1,6 @@
 using FishyFlip.Models;
 using ListSky.Lib.BlueSky.Connectors;
-using ListSky.Lib.DTO;
+using ListSky.Lib.Config;
 
 namespace ListSky.Tests;
 

@@ -1,9 +1,7 @@
-using System.Globalization;
 using System.Text.Json;
-using CsvHelper;
-using CsvHelper.Configuration;
+using ListSky.Lib.DTO;
 
-namespace ListSky.Lib.DTO;
+namespace ListSky.Lib.Config;
 
 public class Config
 {
@@ -28,23 +26,6 @@ public class Config
         {
             _allLists = _allLists ?? JsonSerializer.Deserialize<AllLists>(File.ReadAllText(Path_AllListsMetadataJson), options)!;
             return _allLists;
-        }
-    }
-
-    public IEnumerable<ListEntry> ReadList(string path)
-    {
-        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-        {
-            AllowComments = true,
-            Delimiter = ",",
-            HasHeaderRecord = true,
-            IgnoreBlankLines = true,
-            // PrepareHeaderForMatch = args => args.Header.ToLower(),
-        };
-        using (var reader = new StreamReader(path))
-        using (var csv = new CsvReader(reader, config))
-        {
-            return csv.GetRecords<ListEntry>().ToList();
         }
     }
 

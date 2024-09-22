@@ -1,4 +1,5 @@
 using HandlebarsDotNet;
+using ListSky.Lib.Config;
 using ListSky.Lib.DTO;
 
 namespace ListSky.Lib.Templating;
@@ -11,7 +12,7 @@ public class DocsGenerator
     // Templates are Handlebars.NET
     // https://github.com/Handlebars-Net/Handlebars.Net
 
-    public static IEnumerable<DocFile> Render(Config config, string overviewTemplatePath = OVERVIEW_TEMPLATE_PATH, string listTemplatePath = LIST_TEMPLATE_PATH)
+    public static IEnumerable<DocFile> Render(Config.Config config, string overviewTemplatePath = OVERVIEW_TEMPLATE_PATH, string listTemplatePath = LIST_TEMPLATE_PATH)
     {
         var listTemplateString = File.ReadAllText(listTemplatePath);
         var overviewTemplateString = File.ReadAllText(overviewTemplatePath);
@@ -34,9 +35,9 @@ public class DocsGenerator
             Html = overviewTemplate(overviewModel),
         });
 
-        docs.AddRange(config.AllListData.Lists.Select(list =>
+        docs.AddRange(config.AllListData.Lists.Where(list => list.Publish).Select(list =>
         {
-            var entries = config.ReadList(list.Path_CSV);
+            var entries = CsvListIO.ReadFile(list.Path_CSV);
             var listModel = new ListModel()
             {
                 Server_AT = config.Server_AT,

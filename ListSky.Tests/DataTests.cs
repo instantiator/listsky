@@ -1,6 +1,6 @@
 using System.Text.Json;
 using ListSky.Lib.BlueSky.ListManagement;
-using ListSky.Lib.DTO;
+using ListSky.Lib.Config;
 
 namespace ListSky.Tests;
 
@@ -26,7 +26,7 @@ public class DataTests : AbstractATConnectedTests
     public void AllEntries_HaveRequiredFields()
     {
         var config = Config.FromEnv();
-        foreach (var entry in config.AllListData.Lists.SelectMany(l => config.ReadList(l.Path_CSV)))
+        foreach (var entry in config.AllListData.Lists.SelectMany(l => CsvListIO.ReadFile(l.Path_CSV)))
         {
             Assert.IsNotNull(entry.Type, "Entry Type is null for: " + JsonSerializer.Serialize(entry));
             Assert.IsFalse(string.IsNullOrWhiteSpace(entry.Name), "Entry Name is empty for: " + JsonSerializer.Serialize(entry));
@@ -51,7 +51,7 @@ public class DataTests : AbstractATConnectedTests
     {
         foreach (var list in config.AllListData.Lists)
         {
-            var authoritativeEntries = config.ReadList(list.Path_CSV);
+            var authoritativeEntries = CsvListIO.ReadFile(list.Path_CSV);
             var allFoundLists = await connection.GetListsAsync();
             var foundList = allFoundLists.Single(l => l.Uri.Pathname.EndsWith($"/{list.ListId}"));
             var foundItems = await connection.GetListItemsAsync(foundList.Uri);

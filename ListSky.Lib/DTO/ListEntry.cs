@@ -19,4 +19,17 @@ public class ListEntry
     public string? Url_RssFeed { get; set; }
     public string? Url_Website { get; set; }
     public string? Url_Blog { get; set; }
+
+    public string? Providence { get; set; }
+
+    public bool IsProbably(ListEntry alt)
+    {
+        return alt.Type == Type && (
+            alt.AccountName_BlueSky == AccountName_BlueSky ||
+            alt.AccountName_GitHub == AccountName_GitHub ||
+            alt.AccountName_LinkedIn == AccountName_LinkedIn ||
+            (alt.AccountName_Mastodon == AccountName_Mastodon && alt.Server_Mastodon == alt.Server_Mastodon) ||
+            alt.AccountName_Twitter == AccountName_Twitter ||
+            alt.AccountName_YouTube == AccountName_YouTube);
+    }
 }

@@ -1,5 +1,5 @@
 using HandlebarsDotNet;
-using ListSky.Lib.DTO;
+using ListSky.Lib.Config;
 using ListSky.Lib.Templating;
 
 namespace ListSky.Tests;
