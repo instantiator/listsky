@@ -33,8 +33,7 @@ jobs:
               - 'Data/**'
               - 'ListSky.Lib/Config/**'
               - 'ListSky.Lib/DTO/**'
-            Templates:
-              - 'Templates/**'
+              - 'ListSky.Lib/Import/**'
 
   run-all-tests:
     runs-on: ubuntu-latest
@@ -55,8 +54,7 @@ jobs:
       - name: Build solution
         run: dotnet build
 
-      - name: Run Config tests
-        if: ${{ needs.changes.outputs.Config == 'true' }}
+      - name: Run unit tests
         env:
             Server_AT: ${{ secrets.Server_AT }}
             AccountName_AT: ${{ secrets.AccountName_AT }}
@@ -65,7 +63,7 @@ jobs:
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
         run: |
-          dotnet test --verbosity:normal --filter TestCategory=Config
+          dotnet test --verbosity:normal --filter TestCategory=Unit
 
       - name: Run BlueSky tests
         if: ${{ needs.changes.outputs.BlueSky == 'true' }}
@@ -79,8 +77,8 @@ jobs:
         run: |
           dotnet test --verbosity:normal --filter TestCategory=BlueSky
 
-      - name: Run Templates tests
-        if: ${{ needs.changes.outputs.Templates == 'true' }}
+      - name: Run config and data tests
+        if: ${{ needs.changes.outputs.Config == 'true' }}
         env:
             Server_AT: ${{ secrets.Server_AT }}
             AccountName_AT: ${{ secrets.AccountName_AT }}
@@ -89,5 +87,4 @@ jobs:
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
         run: |
-          dotnet test --verbosity:normal --filter TestCategory=Templates
-  
+          dotnet test --verbosity:normal --filter TestCategory=Config

@@ -18,7 +18,6 @@ public static class CsvListIO
         // PrepareHeaderForMatch = args => args.Header.ToLower(),
     };
 
-
     public static IEnumerable<ListEntry> ReadFile(string path)
     {
         using (var reader = new StreamReader(path))

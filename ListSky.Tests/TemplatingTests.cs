@@ -5,7 +5,7 @@ using ListSky.Lib.Templating;
 namespace ListSky.Tests;
 
 [TestClass]
-[TestCategory("Templates")]
+[TestCategory("Unit")]
 public class TemplatingTests
 {
     [TestMethod]
@@ -28,6 +28,5 @@ public class TemplatingTests
         var files = DocsGenerator.Render(config);
         Assert.AreEqual(config.AllListData.Lists.Count() + 1, files.Count());
     }
-
 }
 

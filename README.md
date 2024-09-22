@@ -114,21 +114,43 @@ NB. `GITHUB_REPO` and `GITHUB_USER` are provided by GitHub Actions, so do not ne
 
 # Developer notes
 
-## Build and test locally
+## Build and run tests locally
 
-Use the `run-tests.sh` script. This will first source environment variables from your `test.env` file - so that you can test from 
+Use the `run-tests.sh` script.
 
 ```bash
 ./run-tests.sh
 ```
 
+If no filter is provided, this will run all the tests - including BlueSky and data tests.
+
+To do so, the tests will source environment variables from your `test.env` file. so that you can test from 
+
 **⚠️ Warning.** The tests clean up after themselves by deleting all lists on the test profile starting with the words: `Unit test`
 
-Use the `test-app.sh` script with the `apply` command to run the application with environment variables from `test.env`.
+### Run a subset of the tests
+
+You can provide a `TestCategory` to filter tests, eg.
+
+```bash
+./run-tests.sh --filter TestCategory=Unit
+```
+
+| TestCategory | Tests | Description |
+|-|-|-|
+| `Unit` | **Unit tests** | These test individual pieces code in isolation, and do not rely on configuration, data, or external services. |
+| `BlueSky` | **BlueSky/AT tests** | These test the specific code that uses the BlueSky API and confirms that it can connect and perform operations. |
+| `Config` | **Configuration and data tests** | These test the list configuration and data for validity - against required fields, and social networks for valid accounts. |
+
+## Build and run the app locally
+
+Use the `listsky.sh` script with the command you wish to test.
 
 ```bash
 ./test-app.sh apply
 ```
+
+Environment variables will be sourced from `test.env`.
 
 ## Testing workflows
 

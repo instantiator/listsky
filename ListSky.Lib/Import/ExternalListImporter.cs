@@ -5,12 +5,12 @@ namespace ListSky.Lib.Import;
 
 public enum ExternalListFormat { CSV, JSON }
 
-public class ExternalListImporter(ListMetadata target, string url, ExternalListFormat format)
+public class ExternalListImporter(ListMetadata metadata, string providence, ExternalListFormat format)
 {
 
     public async Task<ExternalSourceReport> ImportAsync()
     {
-        var uri = new Uri(url);
+        var uri = new Uri(providence);
 
         // fetch entries from the specified url
         var entries = format switch
@@ -21,37 +21,42 @@ public class ExternalListImporter(ListMetadata target, string url, ExternalListF
         };
 
         // set providence on all retrieved entries
-        entries = entries.Select(e => { e.Providence = url; return e; });
+        entries = entries.Select(e => { e.Providence = providence; return e; });
 
         // retrieve all current entries for this source
-        var currentEntries = CsvListIO.ReadFile(target.Path_CSV).Where(e => e.Providence == url);
+        var allEntries = CsvListIO.ReadFile(metadata.Path_CSV);
 
-        // diff the current entries with the new entries
-        var currentEntries_add = entries.Where(e => !currentEntries.Any(ce => ce.IsProbably(e)));
-        var currentEntries_update = entries.Where(e => currentEntries.Any(ce => ce.IsProbably(e)));
-        var currentEntries_remove = currentEntries.Where(ce => !entries.Any(e => e.IsProbably(ce)));
-
-        var newEntries = ApplyChanges(currentEntries, currentEntries_add, currentEntries_update, currentEntries_remove);
+        var report = DiffLists(metadata, providence, allEntries, entries);
 
         // write the new entries to the target list
-        CsvListIO.WriteFile(target.Path_CSV, newEntries);
+        var newEntries = ApplyChanges(allEntries, report.Add, report.Update, report.Remove);
+        CsvListIO.WriteFile(metadata.Path_CSV, newEntries);
+
+        return report;
+    }
+
+    public static ExternalSourceReport DiffLists(ListMetadata metadata, string providence, IEnumerable<ListEntry> allEntries, IEnumerable<ListEntry> newEntries)
+    {
+        var relevantCurrentEntries = allEntries.Where(e => e.Providence == providence);
+        var relevantEntries_add = newEntries.Where(e => !relevantCurrentEntries.Any(re => re.IsProbably(e)));
+        var relevantEntries_update = newEntries.Where(e => relevantCurrentEntries.Any(re => re.IsProbably(e)));
+        var relevantEntries_remove = relevantCurrentEntries.Where(re => !newEntries.Any(e => e.IsProbably(re)));
 
         return new ExternalSourceReport
         {
-            ListMetadata = target,
-            Added = currentEntries_add,
-            Updated = currentEntries_update,
-            Removed = currentEntries_remove
+            ListMetadata = metadata,
+            Add = relevantEntries_add,
+            Update = relevantEntries_update,
+            Remove = relevantEntries_remove
         };
     }
 
     private IEnumerable<ListEntry> ApplyChanges(IEnumerable<ListEntry> currentEntries, IEnumerable<ListEntry> add, IEnumerable<ListEntry> update, IEnumerable<ListEntry> remove)
     {
-        var newEntries = currentEntries.ToList();
-        newEntries = newEntries.Where(e => !remove.Any(r => r.IsProbably(e))).ToList();
-        newEntries = newEntries.Select(e => update.FirstOrDefault(u => u.IsProbably(e)) ?? e).ToList();
-        newEntries.AddRange(add);
-        return newEntries;
+        IEnumerable<ListEntry> modifiedList = new List<ListEntry>(currentEntries);
+        modifiedList = modifiedList.Where(e => !remove.Any(r => r.IsProbably(e))).ToList();
+        modifiedList = modifiedList.Select(e => update.FirstOrDefault(u => u.IsProbably(e))?.UpdateInto(e) ?? e).ToList();
+        modifiedList = modifiedList.Concat(add);
+        return modifiedList;
     }
 }
- 

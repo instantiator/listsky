@@ -9,8 +9,28 @@ public class ImportExternalSourcesAction : AbstractAction<IEnumerable<ExternalSo
     {
     }
 
-    protected override Task<bool> ExecuteImplementationAsync(ActionResult<IEnumerable<ExternalSourceReport>> result)
+    protected override async Task<bool> ExecuteImplementationAsync(ActionResult<IEnumerable<ExternalSourceReport>> result)
     {
-        throw new NotImplementedException();
+        var reports = new List<ExternalSourceReport>();
+
+        foreach (var list in config.AllListData.Lists)
+        {
+            foreach (var source in list.ExternalSources_CSV ?? Enumerable.Empty<string>())
+            {
+                var importer = new ExternalListImporter(list, source, ExternalListFormat.CSV);
+                var report = await importer.ImportAsync();
+                reports.Add(report);
+            }
+
+            foreach (var source in list.ExternalSources_JSON ?? Enumerable.Empty<string>())
+            {
+                var importer = new ExternalListImporter(list, source, ExternalListFormat.JSON);
+                var report = await importer.ImportAsync();
+                reports.Add(report);
+            }
+        }
+
+        result.Data = reports;
+        return true;
     }
 }

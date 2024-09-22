@@ -11,6 +11,7 @@ public class Config
     public string Path_AllListsMetadataJson { get; set; } = null!;
     public string GITHUB_REPO { get; set; } = null!;
     public string GITHUB_USER { get; set; } = null!;
+    public string? GITHUB_TOKEN { get; set; }
 
     private static readonly JsonSerializerOptions options = new JsonSerializerOptions
     {
