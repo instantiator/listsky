@@ -21,9 +21,12 @@ public class CreatePullRequestsAction : AbstractAction<IEnumerable<PullRequestRe
     {
         foreach (var report in reports.Where(r => r.ContainsChanges))
         {
+            result.Outputs.Add($"Checking list: {report.ListMetadata.Slug}");
             // calculate changes to the list
             var filename = report.ListMetadata.Path_CSV;
             var currentListEntries = CsvListIO.ReadFile(filename);
+            result.Outputs.Add($" - Preparing to alter: {filename}");
+            result.Outputs.Add($" - Adding {report.Add.Count()}, updating {report.Update.Count()}, removing {report.Remove.Count()} entries");
             var newListEntries = ExternalSourceReportUtils.ApplyChanges(currentListEntries, report);
             var newListContent_CSV = CsvListIO.GenerateFileContent(newListEntries);
 
@@ -33,29 +36,49 @@ public class CreatePullRequestsAction : AbstractAction<IEnumerable<PullRequestRe
             var branch = GenBranch(report);
 
             // create a change set / commit on the branch for this list, with the new CSV
-            // see https://laedit.net/2016/11/12/GitHub-commit-with-Octokit-net.html
             var branchReference = await github.GetBranchReferenceAsync(branch);
             if (branchReference == null) throw new Exception("Failed to create branch reference");
+            result.Outputs.Add($" - Branch {branch}: {branchReference.Url}");
             var updateChangeSet = await github.ModifyFile(
                 branch, 
                 filename, 
                 newListContent_CSV, 
                 $"{title}\n\n{body}");
 
-            // TODO: create a pull request
+            // if updateChangeSet == null, no need to bother updating the PR
+            if (updateChangeSet == null)
+            {
+                result.Outputs.Add($" - No changes to: {filename}");
+                continue;
+            }
+
+            result.Outputs.Add($" - Modified file: {filename}");    
+            result.Outputs.Add($" - Created change set: {updateChangeSet.Commit.Url}");
+
+            // create a pull request from the altered branch
+            var allPRs = await github.GetPRsAsync();
+            var existingPR = allPRs.FirstOrDefault(p => p.Head.Ref == branch);
+            var newPR = await github.CreateOrUpdatePRAsync(branch, "main", title, body, existingPR);
+            result.Outputs.Add($" - {(existingPR == null ? "Created" : "Updated")} PR #{newPR.Number}: {newPR.HtmlUrl}");
         }
         return true;
     }
 
-    public static string GenTitle(ExternalSourceReport report) => $"Auto update {report.ListMetadata.Slug}: {report.ListMetadata.Title}";
+    public static string GenTitle(ExternalSourceReport report) => $"Auto update: {report.ListMetadata.Title}";
 
-    public static string GenDescription(ExternalSourceReport report) => $"This pull request updates the {report.ListMetadata.Title} list with changes from an external source.\n\n" +
+    public static string GenDescription(ExternalSourceReport report) => $"This pull request updates the {report.ListMetadata.Title} list with changes from external sources.\n\n" +
+            $"* List slug: {report.ListMetadata.Slug}\n" +
+            $"* CSV path: {report.ListMetadata.Path_CSV}\n" +
+            $"* List id: {report.ListMetadata.ListId}\n" +
+            $"* Sources:\n" +
+            report.ListMetadata.ExternalSources_CSV?.Select(source => $"  * {source}\n") +
+            report.ListMetadata.ExternalSources_JSON?.Select(source => $"  * {source}\n") + "\n\n" +
             $"## Changes\n\n" +
-            $"- **Added**\n" +
+            $"- **Added ({report.Add.Count()})**\n" +
             $"{string.Join("\n", report.Add.Select(e => $"  - {e.Name}"))}\n\n" +
-            $"- **Updated**\n" +
+            $"- **Updated ({report.Update.Count()})**\n" +
             $"{string.Join("\n", report.Update.Select(e => $"  - {e.Name}"))}\n\n" +
-            $"- **Removed**\n" +
+            $"- **Removed ({report.Remove.Count()})**\n" +
             $"{string.Join("\n", report.Remove.Select(e => $"  - {e.Name}"))}\n\n" +
             $"_Please review these changes and merge if appropriate._";
 

@@ -1,8 +1,11 @@
 using Octokit;
-using Org.BouncyCastle.Asn1.Cmp;
 
 namespace ListSky.Lib.GitHub;
 
+/// <summary>
+/// See also: https://laedit.net/2016/11/12/GitHub-commit-with-Octokit-net.html
+/// </summary>
+/// <param name="config"></param>
 public class GitHubIntegration(Config.Config config)
 {
     protected string Owner => config.GITHUB_USER;
@@ -23,14 +26,27 @@ public class GitHubIntegration(Config.Config config)
     public async Task<IEnumerable<PullRequest>> GetPRsAsync() =>
         await GetClient().PullRequest.GetAllForRepository(Owner, Repo);
 
-    public async Task<PullRequest> CreatePRAsync(string fromBranch, string toBranch, string title, string? body = null)
+    public async Task<PullRequest> CreateOrUpdatePRAsync(string fromBranch, string toBranch, string title, string? body, PullRequest? existingPR)
     {
         var client = GetClient();
-        var newPR = new NewPullRequest(title, fromBranch, toBranch)
+
+        if (existingPR == null)
         {
-            Body = body
-        };
-        return await client.PullRequest.Create(Owner, Repo, newPR);
+            var newPR = new NewPullRequest(title, fromBranch, toBranch)
+            {
+                Body = body
+            };
+            return await client.PullRequest.Create(Owner, Repo, newPR);
+        }
+        else
+        {
+            var updatePR = new PullRequestUpdate
+            {
+                Title = title,
+                Body = body
+            };
+            return await client.PullRequest.Update(Owner, Repo, existingPR.Number, updatePR);
+        }
     }
 
     public async Task ClosePRAsync(PullRequest pr)
@@ -72,9 +88,17 @@ public class GitHubIntegration(Config.Config config)
     public async Task<RepositoryContent?> GetFileAsync(string branch, string filename) =>
         (await GetClient().Repository.Content.GetAllContentsByRef(Owner, Repo, filename, branch)).SingleOrDefault();
 
-    public async Task<RepositoryContentChangeSet> ModifyFile(string branch, string filename, string content, string message)
+    public async Task<RepositoryContentChangeSet?> ModifyFile(string branch, string filename, string content, string message)
     {
-        var file = await GetFileAsync(branch, filename);
+        var existingFile = await GetFileAsync(branch, filename);
+
+        // quick check to see if the file contents has actually changed
+        if (content.Equals(existingFile?.Content))
+        {
+            return null;
+        }
+
+        // file has changed, update it on branch
         return await GetClient()
                 .Repository
                 .Content
@@ -85,7 +109,7 @@ public class GitHubIntegration(Config.Config config)
                     new UpdateFileRequest(
                         message,
                         content,
-                        file!.Sha,
+                        existingFile!.Sha,
                         branch));
     }
 }

@@ -120,7 +120,7 @@ public class GitHubIntegrationTests
 
             Assert.IsNotNull(changes);
 
-            var pr = await github.CreatePRAsync(
+            var pr = await github.CreateOrUpdatePRAsync(
                 "unit-test-branch-for-pr", 
                 "main", 
                 "[unit test] Shorten the README", 
