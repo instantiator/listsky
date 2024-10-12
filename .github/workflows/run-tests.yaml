@@ -12,6 +12,11 @@ on:
       Path_AllListsMetadataJson:
         required: true
 
+permissions:
+  contents: write
+  pull-requests: write
+  # statuses: read
+
 jobs:
   changes:
     runs-on: ubuntu-latest
