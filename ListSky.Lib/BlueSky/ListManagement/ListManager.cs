@@ -2,16 +2,16 @@ using FishyFlip.Models;
 using ListSky.Lib.DTO;
 
 namespace ListSky.Lib.BlueSky.ListManagement;
-public class ListManager
+public class BlueSkyListManager
 {
 
-    public class ListManagerActions
+    public class BlueSkyListManagerActions
     {
         public IEnumerable<ListItemView> ToDelete { get; set; } = new List<ListItemView>();
         public IEnumerable<ListEntry> ToAdd { get; set; } = new List<ListEntry>();
     }
 
-    public static ListManagerActions Compare(IEnumerable<ListEntry> authoritativeList, IEnumerable<ListItemView> foundList)
+    public static BlueSkyListManagerActions Compare(IEnumerable<ListEntry> authoritativeList, IEnumerable<ListItemView> foundList)
     {
         var toDelete = new List<ListItemView>();
         var toAdd = new List<ListEntry>();
@@ -34,7 +34,7 @@ public class ListManager
             }
         }
 
-        return new ListManagerActions
+        return new BlueSkyListManagerActions
         {
             ToDelete = toDelete,
             ToAdd = toAdd

@@ -45,7 +45,7 @@ public class ListManagerTests : AbstractATConnectedTests
             var foundList = await connection.GetListItemsAsync(list.Uri);
 
             // check list manager for actions
-            var opinion = ListManager.Compare(authoritativeList, foundList);
+            var opinion = BlueSkyListManager.Compare(authoritativeList, foundList);
 
             Assert.AreEqual(authoritativeList.Single(), opinion.ToAdd.Single());
             Assert.AreEqual(config.AccountName_AT, opinion.ToDelete.Single().Subject.Handle);

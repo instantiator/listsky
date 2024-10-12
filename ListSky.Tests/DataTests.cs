@@ -61,7 +61,7 @@ public class DataTests : AbstractATConnectedTests
             var allFoundLists = await connection.GetListsAsync();
             var foundList = allFoundLists.Single(l => l.Uri.Pathname.EndsWith($"/{list.ListId}"));
             var foundItems = await connection.GetListItemsAsync(foundList.Uri);
-            var actions = ListManager.Compare(authoritativeEntries, foundItems);
+            var actions = BlueSkyListManager.Compare(authoritativeEntries, foundItems);
 
             foreach (var newEntry in actions.ToAdd)
             {

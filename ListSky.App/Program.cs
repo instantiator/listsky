@@ -40,10 +40,20 @@ public class ListSkyApp
         try
         {
             var config = Config.FromEnv();
-            var action = new ReportOnExternalSourcesAction(config);
-            var result = await action.ExecuteAsync();
-            Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
-            return result.Success;
+            var readAction = new ReportOnExternalSourcesAction(config);
+            var readResult = await readAction.ExecuteAsync();
+            if (readResult.Data != null && readResult.Data.Count() > 0)
+            {
+                var prAction = new CreatePullRequestsAction(config, readResult.Data!);
+                var prResult = await prAction.ExecuteAsync();
+                Console.WriteLine(JsonSerializer.Serialize(prResult, new JsonSerializerOptions { WriteIndented = true }));
+                return prResult.Success;
+            }
+            else
+            {
+                Console.WriteLine(JsonSerializer.Serialize(readResult, new JsonSerializerOptions { WriteIndented = true }));
+                return readResult.Success;
+            }
         }
         catch (Exception e)
         {

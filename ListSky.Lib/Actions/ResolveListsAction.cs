@@ -6,7 +6,7 @@ using ListSky.Lib.IO;
 
 namespace ListSky.Lib.Actions;
 
-public class ListResolutions : List<KeyValuePair<ListMetadata, ListManager.ListManagerActions>>
+public class ListResolutions : List<KeyValuePair<ListMetadata, BlueSkyListManager.BlueSkyListManagerActions>>
 {
 }
 
@@ -33,7 +33,7 @@ public class ResolveListsAction : AbstractAction<ListResolutions>
             var foundList = allFoundLists.FirstOrDefault(l => l.Uri.Pathname.EndsWith($"/{listData.ListId}"));
             if (foundList == null) throw new Exception($"List not found: {listData.ListId}");
             var foundListItems = await connection.GetListItemsAsync(foundList.Uri);
-            var actions = ListManager.Compare(listEntries, foundListItems);
+            var actions = BlueSkyListManager.Compare(listEntries, foundListItems);
 
 
             foreach (var entry in actions.ToDelete)
@@ -71,9 +71,9 @@ public class ResolveListsAction : AbstractAction<ListResolutions>
             result.Outputs.Add($"{listData.Slug}: {successfulAdditions.Count} successful additions");
             result.Outputs.Add($"{listData.Slug}: {successfulRemovals.Count} successful removals");
 
-            resolution.Add(new KeyValuePair<ListMetadata, ListManager.ListManagerActions>(
+            resolution.Add(new KeyValuePair<ListMetadata, BlueSkyListManager.BlueSkyListManagerActions>(
                 listData,
-                new ListManager.ListManagerActions()
+                new BlueSkyListManager.BlueSkyListManagerActions()
                 {
                     ToDelete = successfulRemovals,
                     ToAdd = successfulAdditions
