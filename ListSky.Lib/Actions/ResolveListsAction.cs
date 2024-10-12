@@ -2,16 +2,17 @@
 using FishyFlip.Models;
 using ListSky.Lib.BlueSky.ListManagement;
 using ListSky.Lib.DTO;
+using ListSky.Lib.IO;
 
 namespace ListSky.Lib.Actions;
 
-public class ListResolutions : List<KeyValuePair<ListMetadata, ListManager.ListManagerActions>>
+public class ListResolutions : List<KeyValuePair<ListMetadata, BlueSkyListManager.BlueSkyListManagerActions>>
 {
 }
 
 public class ResolveListsAction : AbstractAction<ListResolutions>
 {
-    public ResolveListsAction(Config config) : base(config)
+    public ResolveListsAction(Config.Config config) : base(config)
     {
     }
 
@@ -22,17 +23,17 @@ public class ResolveListsAction : AbstractAction<ListResolutions>
         var exceptions = new List<Exception>();
         var resolution = new ListResolutions();
 
-        foreach (var listData in config.AllListData.Lists)
+        foreach (var listData in config.AllListData.Lists.Where(list => list.Publish))
         {
             var successfulAdditions = new List<ListEntry>();
             var successfulRemovals = new List<ListItemView>();
 
             result.Outputs.Add($"List: {listData.Title}, {listData.Path_CSV}, {listData.ListId}");
-            var listEntries = config.ReadList(listData.Path_CSV);
+            var listEntries = CsvListIO.ReadFile(listData.Path_CSV);
             var foundList = allFoundLists.FirstOrDefault(l => l.Uri.Pathname.EndsWith($"/{listData.ListId}"));
             if (foundList == null) throw new Exception($"List not found: {listData.ListId}");
             var foundListItems = await connection.GetListItemsAsync(foundList.Uri);
-            var actions = ListManager.Compare(listEntries, foundListItems);
+            var actions = BlueSkyListManager.Compare(listEntries, foundListItems);
 
 
             foreach (var entry in actions.ToDelete)
@@ -70,9 +71,9 @@ public class ResolveListsAction : AbstractAction<ListResolutions>
             result.Outputs.Add($"{listData.Slug}: {successfulAdditions.Count} successful additions");
             result.Outputs.Add($"{listData.Slug}: {successfulRemovals.Count} successful removals");
 
-            resolution.Add(new KeyValuePair<ListMetadata, ListManager.ListManagerActions>(
+            resolution.Add(new KeyValuePair<ListMetadata, BlueSkyListManager.BlueSkyListManagerActions>(
                 listData,
-                new ListManager.ListManagerActions()
+                new BlueSkyListManager.BlueSkyListManagerActions()
                 {
                     ToDelete = successfulRemovals,
                     ToAdd = successfulAdditions

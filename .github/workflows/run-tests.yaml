@@ -12,6 +12,11 @@ on:
       Path_AllListsMetadataJson:
         required: true
 
+permissions:
+  contents: write
+  pull-requests: write
+  # statuses: read
+
 jobs:
   changes:
     runs-on: ubuntu-latest
@@ -21,6 +26,7 @@ jobs:
       BlueSky: ${{ steps.filter.outputs.BlueSky }}
       Config: ${{ steps.filter.outputs.Config }}
       Templates: ${{ steps.filter.outputs.Templates }}
+      GitHub: ${{ steps.filter.outputs.GitHub }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -29,12 +35,13 @@ jobs:
           filters: |
             BlueSky:
               - 'ListSky.Lib/BlueSky/**'
+            GitHub:
+              - 'ListSky.Lib/GitHub/**'
             Config:
               - 'Data/**'
               - 'ListSky.Lib/Config/**'
               - 'ListSky.Lib/DTO/**'
-            Templates:
-              - 'Templates/**'
+              - 'ListSky.Lib/Import/**'
 
   run-all-tests:
     runs-on: ubuntu-latest
@@ -55,8 +62,7 @@ jobs:
       - name: Build solution
         run: dotnet build
 
-      - name: Run Config tests
-        if: ${{ needs.changes.outputs.Config == 'true' }}
+      - name: Run unit tests
         env:
             Server_AT: ${{ secrets.Server_AT }}
             AccountName_AT: ${{ secrets.AccountName_AT }}
@@ -64,8 +70,9 @@ jobs:
             Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dotnet test --verbosity:normal --filter TestCategory=Config
+          dotnet test --verbosity:normal --filter TestCategory=Unit
 
       - name: Run BlueSky tests
         if: ${{ needs.changes.outputs.BlueSky == 'true' }}
@@ -76,11 +83,12 @@ jobs:
             Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           dotnet test --verbosity:normal --filter TestCategory=BlueSky
 
-      - name: Run Templates tests
-        if: ${{ needs.changes.outputs.Templates == 'true' }}
+      - name: Run GitHub tests
+        if: ${{ needs.changes.outputs.GitHub == 'true' }}
         env:
             Server_AT: ${{ secrets.Server_AT }}
             AccountName_AT: ${{ secrets.AccountName_AT }}
@@ -88,6 +96,19 @@ jobs:
             Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dotnet test --verbosity:normal --filter TestCategory=Templates
-  
+          dotnet test --verbosity:normal --filter TestCategory=GitHub
+
+      - name: Run config and data tests
+        if: ${{ needs.changes.outputs.Config == 'true' }}
+        env:
+            Server_AT: ${{ secrets.Server_AT }}
+            AccountName_AT: ${{ secrets.AccountName_AT }}
+            AppPassword_AT: ${{ secrets.AppPassword_AT }}
+            Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
+            GITHUB_REPO: ${{ github.repository }}
+            GITHUB_USER: ${{ github.repository_owner }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet test --verbosity:normal --filter TestCategory=Config

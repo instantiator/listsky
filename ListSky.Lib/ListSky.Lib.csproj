@@ -11,6 +11,7 @@
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="FishyFlip" Version="1.7.56" />
     <PackageReference Include="Handlebars.Net" Version="2.1.6" />
+    <PackageReference Include="Octokit" Version="13.0.1" />
   </ItemGroup>
 
 </Project>
