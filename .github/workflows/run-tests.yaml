@@ -65,6 +65,7 @@ jobs:
             Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           dotnet test --verbosity:normal --filter TestCategory=Unit
 
@@ -77,6 +78,7 @@ jobs:
             Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           dotnet test --verbosity:normal --filter TestCategory=BlueSky
 
@@ -89,6 +91,7 @@ jobs:
             Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           dotnet test --verbosity:normal --filter TestCategory=GitHub
 
@@ -101,5 +104,6 @@ jobs:
             Path_AllListsMetadataJson: ${{ secrets.Path_AllListsMetadataJson }}
             GITHUB_REPO: ${{ github.repository }}
             GITHUB_USER: ${{ github.repository_owner }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           dotnet test --verbosity:normal --filter TestCategory=Config
