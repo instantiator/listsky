@@ -1,11 +1,10 @@
-using ListSky.Lib.DTO;
-using ListSky.Lib.Import;
+using ListSky.Lib.IO;
 
 namespace ListSky.Lib.Actions;
 
-public class ImportExternalSourcesAction : AbstractAction<IEnumerable<ExternalSourceReport>>
+public class ReportOnExternalSourcesAction : AbstractAction<IEnumerable<ExternalSourceReport>>
 {
-    public ImportExternalSourcesAction(Config.Config config) : base(config)
+    public ReportOnExternalSourcesAction(Config.Config config) : base(config)
     {
     }
 
@@ -20,7 +19,7 @@ public class ImportExternalSourcesAction : AbstractAction<IEnumerable<ExternalSo
                 result.Outputs.Add($"External CSV source: {source}");
                 var importer = new ExternalListImporter(list, source, ExternalListFormat.CSV);
                 var report = await importer.ImportAsync();
-                reports.Add(report);
+                if (report.ContainsChanges) { reports.Add(report); }
             }
 
             foreach (var source in list.ExternalSources_JSON ?? Enumerable.Empty<string>())
@@ -28,7 +27,7 @@ public class ImportExternalSourcesAction : AbstractAction<IEnumerable<ExternalSo
                 result.Outputs.Add($"External JSON source: {source}");
                 var importer = new ExternalListImporter(list, source, ExternalListFormat.JSON);
                 var report = await importer.ImportAsync();
-                reports.Add(report);
+                if (report.ContainsChanges) { reports.Add(report); }
             }
         }
 

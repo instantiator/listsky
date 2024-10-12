@@ -39,6 +39,8 @@ public class ListEntry
     public bool DiffersTo(ListEntry alt)
     {
         return alt.Type != Type ||
+            alt.Name != Name ||
+            alt.Description != Description ||
             alt.AccountName_BlueSky != AccountName_BlueSky ||
             alt.AccountName_GitHub != AccountName_GitHub ||
             alt.AccountName_LinkedIn != AccountName_LinkedIn ||

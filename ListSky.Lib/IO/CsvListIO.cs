@@ -1,11 +1,9 @@
-using System;
 using System.Globalization;
-using System.Net;
 using CsvHelper;
 using CsvHelper.Configuration;
 using ListSky.Lib.DTO;
 
-namespace ListSky.Lib.Config;
+namespace ListSky.Lib.IO;
 
 public static class CsvListIO
 {
@@ -33,6 +31,16 @@ public static class CsvListIO
         using (var csv = new CsvWriter(writer, CSV_CONFIG))
         {
             csv.WriteRecords(list);
+        }
+    }
+
+    public static string GenerateFileContent(IEnumerable<ListEntry> list)
+    {
+        using (var writer = new StringWriter())
+        using (var csv = new CsvWriter(writer, CSV_CONFIG))
+        {
+            csv.WriteRecords(list);
+            return writer.ToString();
         }
     }
 

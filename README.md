@@ -23,7 +23,7 @@ This tool will update lists on BlueSky based on edits made to CSV files in the `
 
 1. Fork this repository
 1. Make your edits to a list CSV in the `Data` directory
-   
+
    (eg. edit `Data/list-ci.csv` to add a new Collective Intelligence person)
 
 1. Commit and push your change to your fork
@@ -37,23 +37,23 @@ Here's an [example pull request](https://github.com/instantiator/listsky/pull/9)
 
 You could also [create a new issue](https://github.com/instantiator/listsky/issues/new/choose). Make sure you provide enough info about the people you want to add. (As a minimum, provide a name, description, BlueSky account, and state which list you'd like to add them to.)
 
-* Name
-* Description
-* Record type (individual / organisation / community / bot)
-* BlueSky account
-* List(s) to add them to
+- Name
+- Description
+- Record type (individual / organisation / community / bot)
+- BlueSky account
+- List(s) to add them to
 
 You can also add details of a number of other accounts:
 
-* Other accounts (optional)
-  * Mastodon
-  * Twitter
-  * LinkedIn
-  * YouTube
-  * GitHub
-  * RSS feed url
-  * Website url
-  * Blog url
+- Other accounts (optional)
+  - Mastodon
+  - Twitter
+  - LinkedIn
+  - YouTube
+  - GitHub
+  - RSS feed url
+  - Website url
+  - Blog url
 
 This is a bit less technical - someone will review this and manually modify the list. It'll also go a bit slower as they have a little more work to do this way.
 
@@ -61,10 +61,10 @@ This is a bit less technical - someone will review this and manually modify the 
 
 Please ensure you provide a value for:
 
-* `Name` - name of the person/organisation/community/bot to include in the list
-* `Type` - type of record (see below)
-* `Description` - a description of the record you're adding that links it to the list
-* `AccountName_BlueSky` - the AT account name - for BlueSky these are often suffixed with `.bsky.social`, eg. `instantiator.bsky.social`
+- `Name` - name of the person/organisation/community/bot to include in the list
+- `Type` - type of record (see below)
+- `Description` - a description of the record you're adding that links it to the list
+- `AccountName_BlueSky` - the AT account name - for BlueSky these are often suffixed with `.bsky.social`, eg. `instantiator.bsky.social`
 
 All other columns are optional, but very helpful!
 
@@ -72,10 +72,10 @@ All other columns are optional, but very helpful!
 
 When editing a CSV record, note that it must have a value in the `Type` column. This can be:
 
-* `Individual` - a person who should be included in the list
-* `Organisation` - a charity, company, government department, etc. (ie. a formal organisation)
-* `Community` - an account representing an association of people that's not a formal organisation
-* `Bot` - a helpful bot that ought to be included in the list
+- `Individual` - a person who should be included in the list
+- `Organisation` - a charity, company, government department, etc. (ie. a formal organisation)
+- `Community` - an account representing an association of people that's not a formal organisation
+- `Bot` - a helpful bot that ought to be included in the list
 
 **NB. Match the spelling and capitalisation above - in particular the UK English spelling of Organisation!**
 
@@ -94,10 +94,10 @@ When editing a CSV record, note that it must have a value in the `Type` column. 
 
 To configure the runtime environment, provide values for the following GithHub Actions repository secrets:
 
-* `Server_AT` (the AT server, eg. `bsky.social`)
-* `AccountName_AT` (the account that publishes the lists, eg. `instantiator.bsky.social`)
-* `AppPassword_AT` (create an app password for this use case)
-* `Path_AllListsMetadataJson` (relative path to your config, probably best left as: `Data/lists.jsonc`)
+- `Server_AT` (the AT server, eg. `bsky.social`)
+- `AccountName_AT` (the account that publishes the lists, eg. `instantiator.bsky.social`)
+- `AppPassword_AT` (create an app password for this use case)
+- `Path_AllListsMetadataJson` (relative path to your config, probably best left as: `Data/lists.jsonc`)
 
 To test locally, create a file called `test.env` file in the root of this repository, and provide values for these properties:
 
@@ -116,38 +116,39 @@ NB. `GITHUB_REPO` and `GITHUB_USER` are provided by GitHub Actions, so do not ne
 
 ## Build and run tests locally
 
-Use the `run-tests.sh` script.
+Use one of the `run-*-tests.sh` scripts.
+
+| Script                     | Function                                               | Purpose                                                          |
+| -------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------- |
+| `run-unit-tests.sh`        | Runs tests with `--filter "TestCategory=Unit"`.        | These test basic code functionality.                             |
+| `run-config-tests.sh`      | Runs tests with `--filter "TestCategory=Config"`.      | These test that the config is valid.                             |
+| `run-integration-tests.sh` | Runs tests with `--filter "TestCategory=Integration"`. | These test that the application can integrate with social media. |
+
+eg.
 
 ```bash
-./run-tests.sh
+./run-unit-tests.sh
 ```
 
-If no filter is provided, this will run all the tests - including BlueSky and data tests.
-
-To do so, the tests will source environment variables from your `test.env` file. so that you can test from 
+Tests will source environment variables from your `test.env` file. so that you can provide social media connection information.
 
 **⚠️ Warning.** The tests clean up after themselves by deleting all lists on the test profile starting with the words: `Unit test`
 
-### Run a subset of the tests
+### Test categories
 
-You can provide a `TestCategory` to filter tests, eg.
-
-```bash
-./run-tests.sh --filter TestCategory=Unit
-```
-
-| TestCategory | Tests | Description |
-|-|-|-|
-| `Unit` | **Unit tests** | These test individual pieces code in isolation, and do not rely on configuration, data, or external services. |
-| `BlueSky` | **BlueSky/AT tests** | These test the specific code that uses the BlueSky API and confirms that it can connect and perform operations. |
-| `Config` | **Configuration and data tests** | These test the list configuration and data for validity - against required fields, and social networks for valid accounts. |
+| `TestCategory` | Tests                            | Description                                                |
+| -------------- | -------------------------------- | ---------------------------------------------------------- |
+| `Unit`         | **Unit tests**                   | Unit tests are for individual pieces code in isolation.    |
+| `Config`       | **Configuration and data tests** | Tests config and data for validity.                        |
+| `Integration`  | **Social media tests**           | These tests confirm that external APIs behave as expected. |
+| `BlueSky`      | **BlueSky/AT tests**             | The subset of integration tests for BlueSky connectivity.  |
 
 ## Build and run the app locally
 
 Use the `listsky.sh` script with the command you wish to test.
 
 ```bash
-./test-app.sh apply
+./listsky.sh apply
 ```
 
 Environment variables will be sourced from `test.env`.
@@ -155,7 +156,6 @@ Environment variables will be sourced from `test.env`.
 ## Testing workflows
 
 Install [act](https://nektosact.com/installation/index.html) and the GitHub CLI...
-
 
 ```bash
 brew install act

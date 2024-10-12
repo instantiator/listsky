@@ -5,6 +5,7 @@ namespace ListSky.Tests;
 
 [TestClass]
 [TestCategory("BlueSky")]
+[TestCategory("Integration")]
 public class ListManagerTests : AbstractATConnectedTests
 {
 

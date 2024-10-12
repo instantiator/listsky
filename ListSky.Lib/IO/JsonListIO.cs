@@ -1,11 +1,10 @@
 using System.Text.Json;
 using ListSky.Lib.DTO;
 
-namespace ListSky.Lib.Config;
+namespace ListSky.Lib.IO;
 
 public class JsonListIO
 {
-
     public static async Task<IEnumerable<ListEntry>> ReadUriAsync(Uri uri)
     {
         using (var client = new HttpClient())

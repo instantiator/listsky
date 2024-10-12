@@ -5,10 +5,10 @@ using ListSky.Lib.Templating;
 namespace ListSky.Tests;
 
 [TestClass]
-[TestCategory("Unit")]
 public class TemplatingTests
 {
     [TestMethod]
+    [TestCategory("Config")]
     public void TemplateFiles_Valid()
     {
         Assert.IsTrue(File.Exists(DocsGenerator.OVERVIEW_TEMPLATE_PATH), $"Overview template not found at: {DocsGenerator.OVERVIEW_TEMPLATE_PATH}");
@@ -22,6 +22,7 @@ public class TemplatingTests
     }
 
     [TestMethod]
+    [TestCategory("Unit")]
     public void DocsGenerator_GeneratesListDocumentation()
     {
         var config = Config.FromEnv();

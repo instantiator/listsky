@@ -1,11 +1,13 @@
+using System.ComponentModel;
+
 namespace ListSky.Tests;
 
 [TestClass]
-[TestCategory("BlueSky")]
 public class ATConnectorTests : AbstractATConnectedTests
 {
-
     [TestMethod]
+    [TestCategory("BlueSky")]
+    [TestCategory("Integration")]
     public void ATConnector_CanConnect()
     {
         Assert.IsNotNull(session);
@@ -13,6 +15,8 @@ public class ATConnectorTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("BlueSky")]
+    [TestCategory("Integration")]
     public async Task ATConnector_CanGetLists()
     {
         var lists = await connection.GetListsAsync();
@@ -20,6 +24,8 @@ public class ATConnectorTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("BlueSky")]
+    [TestCategory("Integration")]
     public async Task ATConnector_CanCreateList()
     {
         var list = await connection.CreateListAsync("Unit test list");
@@ -30,6 +36,8 @@ public class ATConnectorTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("BlueSky")]
+    [TestCategory("Integration")]
     public async Task ATConnector_CanAddAndRemovePersonFromList()
     {
         // create list
@@ -78,6 +86,8 @@ public class ATConnectorTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("BlueSky")]
+    [TestCategory("Integration")]
     public async Task ATConnector_CanPost()
     {
         var result = await connection.PostAsync("Unit test message");
@@ -89,6 +99,8 @@ public class ATConnectorTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("BlueSky")]
+    [TestCategory("Integration")]
     public async Task ATConnector_CanPostWithFacets()
     {
         var result = await connection.PostAsync("Unit test message @instantiator.bsky.social has a blog at https://instantiator.dev");

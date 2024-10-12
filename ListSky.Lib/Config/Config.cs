@@ -40,6 +40,7 @@ public class Config
             Path_AllListsMetadataJson = Environment.GetEnvironmentVariable("Path_AllListsMetadataJson") ?? throw new Exception("Path_AllListsMetadataJson not set"),
             GITHUB_REPO = Environment.GetEnvironmentVariable("GITHUB_REPO") ?? throw new Exception("GITHUB_REPO not set"),
             GITHUB_USER = Environment.GetEnvironmentVariable("GITHUB_USER") ?? throw new Exception("GITHUB_USER not set"),
+            GITHUB_TOKEN = Environment.GetEnvironmentVariable("GITHUB_TOKEN") // may not be present
         };
     }
 }

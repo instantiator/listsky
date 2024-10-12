@@ -1,14 +1,15 @@
 using System.Text.Json;
 using ListSky.Lib.BlueSky.ListManagement;
 using ListSky.Lib.Config;
+using ListSky.Lib.IO;
 
 namespace ListSky.Tests;
 
 [TestClass]
-[TestCategory("Config")]
 public class DataTests : AbstractATConnectedTests
 {
     [TestMethod]
+    [TestCategory("Config")]
     public void AllLists_HaveRequiredFields()
     {
         var config = Config.FromEnv();
@@ -22,6 +23,7 @@ public class DataTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("Config")]
     public void AllEntries_HaveRequiredFields()
     {
         var config = Config.FromEnv();
@@ -34,6 +36,9 @@ public class DataTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("Config")]
+    [TestCategory("BlueSky")]
+    [TestCategory("Integration")]
     public async Task AT_PublishedLists_Exist()
     {
         var atLists = await connection.GetListsAsync();
@@ -45,6 +50,9 @@ public class DataTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("Config")]
+    [TestCategory("BlueSky")]
+    [TestCategory("Integration")]
     public async Task AT_NewListEntries_ExistOnSocialNetwork()
     {
         foreach (var list in config.AllListData.Lists)
@@ -64,6 +72,8 @@ public class DataTests : AbstractATConnectedTests
     }
 
     [TestMethod]
+    [TestCategory("Config")]
+    [TestCategory("Integration")]
     public async Task ExternalSources_UrisExist()
     {
         foreach (var list in config.AllListData.Lists)
