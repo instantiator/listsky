@@ -35,7 +35,7 @@ public class CreatePullRequestsFromExternalSourceReportsAction : AbstractAction<
             // create a change set / commit on the branch for this list, with the new CSV
             // see https://laedit.net/2016/11/12/GitHub-commit-with-Octokit-net.html
             var branchReference = github.GetBranchReferenceAsync(branch);
-            var updateChangeSet = await github.CreateUpdateChangeSet(
+            var updateChangeSet = await github.ModifyFile(
                 branch, 
                 filename, 
                 newListContent_CSV, 
